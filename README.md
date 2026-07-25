@@ -1,6 +1,6 @@
 <div align="center">
   <h1>🚀 Enterprise Agentic RAG System</h1>
-  <p><strong>Intelligent Multi-Agent Retrieval-Augmented Generation Backend</strong></p>
+  <p><strong>f Backend</strong></p>
   
   <p>
     <img src="https://img.shields.io/badge/Python-3.9+-blue.svg" alt="Python Version">
