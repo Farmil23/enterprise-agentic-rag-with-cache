@@ -61,4 +61,7 @@ langchain_google_genai
 langchain-google-vertexai
 
 sentence_transformers
-protobuf 
+protobuf
+langgraph-checkpoint-postgres
+psycopg
+psycopg-pool 
