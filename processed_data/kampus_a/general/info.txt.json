@@ -1,0 +1,8 @@
+{
+  "filename": "info.txt",
+  "source_type": "general",
+  "chunks": [
+    "# Panduan Monitor Job di Kampus A\n\nMonitor Job di Kampus A adalah tugas khusus yang diberikan kepada ketua program studi (Kaprodi) dan tata usaha (TU) untuk memantau absensi mahasiswa secara real-time setiap hari.\nSistem yang digunakan untuk Monitor Job di Kampus A bernama \"A-Sync System\".\nGaji tambahan untuk dosen yang mengambil peran ekstra dalam Monitor Job adalah Rp 500.000 per bulan.\nJika ada mahasiswa yang membolos 3 kali, Monitor Job akan secara otomatis mengirimkan surat peringatan (SP) ke email mahasiswa."
+  ],
+  "tenant_id": "kampus_a"
+}

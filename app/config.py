@@ -24,4 +24,7 @@ class Settings:
     QDRANT_COLLECTION = "enterprise_rag"
     QDRANT_COLLECTION_CACHE_NAME = "agent_cache"
 
+    # Relational Database
+    POSTGRES_URL = os.getenv("POSTGRES_URL")
+
 settings = Settings()

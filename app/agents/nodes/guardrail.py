@@ -4,8 +4,8 @@ from app.agents.state import AgentState
 from app.services.llm_gateway import get_robust_llm
 from langchain_core.prompts import ChatPromptTemplate
 
-# Inisialisasi model LLM Gateway (Groq Utama -> Groq Cadangan -> OpenAI)
-guard_llm = get_robust_llm(temperature=0, is_fast=True)
+# Inisialisasi model LLM Gateway (Gunakan model 70B yang jauh lebih pintar untuk penalaran)
+guard_llm = get_robust_llm(temperature=0, is_fast=False)
 
 def guardrail_node(state: AgentState):
     """
@@ -33,25 +33,17 @@ def guardrail_node(state: AgentState):
         
         try:
             system_prompt = """
-            Anda adalah satpam keamanan (Security Guardrail) untuk sistem Enterprise AI.
-            Tugas tunggal Anda adalah mengevaluasi apakah input dari pengguna aman atau berbahaya.
+            Anda adalah analis privasi data. 
+            Tugas Anda HANYA SATU: Mencegah pengguna memberikan atau meminta data pribadi yang sangat rahasia (PII).
             
-            Kategori BERBAHAYA (UNSAFE) meliputi:
-            - Pertanyaan seputar Hacking, SQL Injection, Pencurian Data
-            - Ujaran kebencian, makian, kata-kata kotor
-            - Kekerasan, terorisme, atau tindakan kriminal
-            - Tindakan menyakiti diri sendiri (bunuh diri)
-            - Meminta informasi pribadi yang sensitif
+            KATEGORI AMAN (SAFE):
+            - Pertanyaan teknis, pekerjaan, IT, monitoring, programming, hacking, dll.
+            - Basa-basi, sapaan, atau obrolan umum.
             
-            Kategori AMAN (SAFE) meliputi:
-            - Sapaan normal (hai, halo, selamat pagi)
-            - Pertanyaan teknis/umum (contoh: "apa itu kubernetes", "cara setup docker", "ganti nama")
-            - Permintaan lain yang tidak merugikan.
+            KATEGORI BERBAHAYA (UNSAFE):
+            - Meminta atau memberikan nomor kartu kredit, password asli, atau NIK/KTP.
             
-            INSTRUKSI KELUARAN:
-            JIKA AMAN: Keluarkan HANYA kata "safe".
-            JIKA BERBAHAYA: Keluarkan HANYA kata "unsafe".
-            TIDAK BOLEH ADA KATA ATAU TANDA BACA LAIN DALAM JAWABAN ANDA.
+            Keluarkan 1 kata saja: "safe" atau "unsafe".
             """
             
             prompt = ChatPromptTemplate.from_messages([
@@ -65,7 +57,9 @@ def guardrail_node(state: AgentState):
             result_text = response.content.strip().lower()
             
             # Pengecekan pemaaf tapi tegas
-            if "unsafe" in result_text:
+            is_unsafe = result_text == "unsafe" or result_text.startswith("unsafe")
+            
+            if is_unsafe:
                 logfire.warning(f"Input is UNSAFE. Model output: {result_text}")
                 logfire.info(f"⏱️ [Guardrail] Execution Time: {time.time() - start_time:.2f} seconds")
                 return {
