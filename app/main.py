@@ -3,38 +3,50 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-logfire.configure(token=os.getenv("LOGFIRE_TOKEN"))
+if os.getenv("LOGFIRE_TOKEN"):
+    logfire.configure(token=os.getenv("LOGFIRE_TOKEN"))
 
-from fastapi import FastAPI, Response, Header, HTTPException
+from fastapi import FastAPI, Response, Header, HTTPException, Depends
 import threading
+import json
 from fastapi.middleware.cors import CORSMiddleware
 from app.agents.graph import rag_agent
-from app.agents.graph import rag_agent
-from app.services.auth.client_manager import log_usage
+from app.services.auth.client_manager import log_usage, setup_tables, create_chat_thread, rename_chat_thread, get_db_connection
 
 from pydantic import BaseModel
 from typing import Optional
 
+# Import the new routers
+from app.routers import auth, admin, files
+from app.routers.admin import get_current_user
+
 app = FastAPI(title="Enterprise Agentic RAG API")
+
+# Ensure tables are setup on startup
+setup_tables()
 
 # Setup CORS to allow React frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # In production, change this to specific domain
+    allow_origin_regex=".*", # Allow all origins dynamically
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# Include Routers
+app.include_router(auth.router)
+app.include_router(admin.router)
+app.include_router(files.router)
+
 class QueryRequest(BaseModel):
     q: str
     thread_id: Optional[str] = "default_user"
-    tenant_id: Optional[str] = "default"
     
 @app.get("/")
 def home():
     return {
-        "messages" : "Enterprise yang dibuat oleh farhan sudah nyala"
+        "messages" : "Enterprise Agentic RAG Backend is running."
     }
     
 @app.get("/graph")
@@ -46,10 +58,11 @@ def get_graph_image():
         return {"error" : f"Could not generate graph image: {e}"}
 
 @app.post("/query")
-def query(request: QueryRequest):
+def query(request: QueryRequest, user: dict = Depends(get_current_user)):
     q = request.q
     thread_id = request.thread_id
-    tenant_id = request.tenant_id
+    username = user["username"]
+    tenant_id = user["tenant_id"] # Extract from JWT safely
     
     initial_state = {
         "messages": [{
@@ -74,13 +87,20 @@ def query(request: QueryRequest):
         
         print("DEBUG FINAL OUTPUT:", final_output)
         
-        # Log the usage securely into Postgres di BACKGROUND THREAD (agar Uvicorn tidak nge-hang menunggu koneksi)
-        # threading.Thread(target=log_usage, args=(tenant_id, q)).start()
+        # Ensure a thread is registered
+        title = q[:40] + ("..." if len(q) > 40 else "")
+        threading.Thread(target=create_chat_thread, args=(thread_id, tenant_id, username, title)).start()
+        
+        # Log the usage securely into Postgres in background
+        answer_text = final_output.get("final_answer", "")
+        sources_json = json.dumps(final_output.get("documents", []))
+        threading.Thread(target=log_usage, args=(tenant_id, username, q, answer_text, sources_json)).start()
         
         return {
             "question": q,
             "contextualized_query" : final_output.get("contextualized_query", ""),
             "answer" : final_output.get("final_answer"),
+            "suggested_questions" : final_output.get("suggested_questions", []),
             "thought_process" : final_output.get("plan"),
             "status" : final_output.get("status"),
             "sources" : final_output.get("documents", []),
@@ -98,7 +118,8 @@ def query(request: QueryRequest):
         }
 
 @app.get("/history/{thread_id}")
-def get_chat_history(thread_id: str):
+def get_chat_history(thread_id: str, user: dict = Depends(get_current_user)):
+    # Note: ideally we check if the thread_id belongs to the user
     config = {"configurable": {"thread_id": thread_id}}
     state_snapshot = rag_agent.get_state(config)
     
@@ -118,15 +139,48 @@ def get_chat_history(thread_id: str):
         "messages": messages
     }
 
-@app.delete("/history/{thread_id}")
-def delete_chat_history(thread_id: str):
-    from app.services.memory_chat.aiven import conn
+@app.get("/chat/threads")
+def get_user_chat_threads(user: dict = Depends(get_current_user)):
+    username = user["username"]
+    tenant_id = user["tenant_id"]
     try:
-        with conn.cursor() as cur:
-            # Menghapus seluruh riwayat memori LangGraph untuk thread ini di Aiven Postgres
-            cur.execute("DELETE FROM checkpoint_writes WHERE thread_id = %s", (thread_id,))
-            cur.execute("DELETE FROM checkpoint_blobs WHERE thread_id = %s", (thread_id,))
-            cur.execute("DELETE FROM checkpoints WHERE thread_id = %s", (thread_id,))
+        with get_db_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    "SELECT thread_id, title, created_at FROM chat_threads WHERE username = %s AND tenant_id = %s ORDER BY created_at DESC",
+                    (username, tenant_id)
+                )
+                rows = cur.fetchall()
+                threads = [{"thread_id": r[0], "title": r[1], "created_at": r[2]} for r in rows]
+                return {"threads": threads}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+class RenameRequest(BaseModel):
+    title: str
+
+@app.put("/chat/threads/{thread_id}")
+def rename_thread(thread_id: str, request: RenameRequest, user: dict = Depends(get_current_user)):
+    success = rename_chat_thread(thread_id, user["username"], request.title)
+    if not success:
+        raise HTTPException(status_code=400, detail="Failed to rename thread")
+    return {"status": "success"}
+
+@app.delete("/history/{thread_id}")
+def delete_chat_history(thread_id: str, user: dict = Depends(get_current_user)):
+    if user.get("role") not in ["super_admin", "tenant_admin"]:
+        raise HTTPException(status_code=403, detail="Deleting chat history is blocked for monitoring purposes.")
+    try:
+        import sqlite3
+        conn = sqlite3.connect("checkpoints.db")
+        with conn:
+            conn.execute("DELETE FROM checkpoint_writes WHERE thread_id = ?", (thread_id,))
+            conn.execute("DELETE FROM checkpoint_blobs WHERE thread_id = ?", (thread_id,))
+            conn.execute("DELETE FROM checkpoints WHERE thread_id = ?", (thread_id,))
+            # Optional: Delete from MySQL chat_threads as well
+            with get_db_connection() as mconn:
+                with mconn.cursor() as mcur:
+                    mcur.execute("DELETE FROM chat_threads WHERE thread_id = %s", (thread_id,))
         return {"status": "success", "message": f"History for thread '{thread_id}' has been permanently deleted."}
     except Exception as e:
         logfire.error(f"Failed to delete history: {e}")

@@ -26,5 +26,6 @@ class Settings:
 
     # Relational Database
     POSTGRES_URL = os.getenv("POSTGRES_URL")
+    USE_LOCAL_DB = os.getenv("USE_LOCAL_DB", "true").lower() == "true"
 
 settings = Settings()
