@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { Scale, LogIn, UserPlus, Shield, CheckCircle2 } from 'lucide-react'
+import { Scale, LogIn, UserPlus, Shield, ChevronLeft } from 'lucide-react'
 
 export default function LoginRegister() {
   const [isLogin, setIsLogin] = useState(true)
@@ -35,7 +35,7 @@ export default function LoginRegister() {
         alert(err.detail || 'Login failed')
       }
     } catch (err) {
-      alert('Connection error')
+      alert('Error connecting to server')
     } finally {
       setIsLoading(false)
     }
@@ -58,74 +58,148 @@ export default function LoginRegister() {
         alert(err.detail || 'Registration failed')
       }
     } catch (err) {
-      alert('Connection error')
+      alert('Error connecting to server')
     } finally {
       setIsLoading(false)
     }
   }
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', background: '#050714', color: '#fff', fontFamily: 'Inter, sans-serif' }}>
+    <div style={{ 
+      minHeight: '100vh', 
+      display: 'flex', 
+      alignItems: 'center', 
+      justifyContent: 'center',
+      backgroundImage: 'url(/hero_bg.png)',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      color: '#fff', 
+      fontFamily: "'Inter', sans-serif",
+      position: 'relative'
+    }}>
       
-      {/* Left side: Form */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '2rem' }}>
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#f8fafc', textDecoration: 'none', width: 'fit-content' }}>
-          <Scale size={24} color="#e2e8f0" />
-          <span style={{ fontSize: '1.25rem', fontWeight: 700 }}>Hanka</span>
-        </Link>
+      {/* Dark overlay for readability */}
+      <div style={{ position: 'absolute', inset: 0, background: 'rgba(5,7,20,0.7)', backdropFilter: 'blur(8px)', zIndex: 0 }}></div>
+      
+      <div style={{ 
+        position: 'relative', 
+        zIndex: 10, 
+        width: '100%', 
+        maxWidth: '480px', 
+        padding: '2rem' 
+      }}>
         
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', maxWidth: '400px', margin: '0 auto', width: '100%' }}>
-          <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-            <h1 style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '0.5rem' }}>{isLogin ? 'Welcome back' : 'Create an account'}</h1>
-            <p style={{ color: '#94a3b8' }}>{isLogin ? 'Enter your details to access your workspace.' : 'Sign up to request access to a tenant.'}</p>
+        {/* Back to Home Link */}
+        <Link to="/" style={{ 
+          display: 'inline-flex', 
+          alignItems: 'center', 
+          gap: '0.5rem', 
+          color: '#94a3b8', 
+          textDecoration: 'none', 
+          marginBottom: '2rem',
+          fontSize: '0.9rem',
+          transition: 'color 0.2s'
+        }} onMouseOver={e=>e.currentTarget.style.color='#fff'} onMouseOut={e=>e.currentTarget.style.color='#94a3b8'}>
+          <ChevronLeft size={16} /> Back to Home
+        </Link>
+
+        {/* Glassmorphism Card */}
+        <div style={{ 
+          background: 'rgba(15, 23, 42, 0.65)', 
+          backdropFilter: 'blur(16px)', 
+          border: '1px solid rgba(255,255,255,0.1)', 
+          borderRadius: '16px', 
+          padding: '3rem',
+          boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)'
+        }}>
+          
+          <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
+              <div style={{ background: 'rgba(255,255,255,0.05)', padding: '1rem', borderRadius: '50%', border: '1px solid rgba(255,255,255,0.1)' }}>
+                <Scale size={32} color="#38bdf8" />
+              </div>
+            </div>
+            <h1 style={{ fontSize: '1.75rem', fontWeight: 600, marginBottom: '0.5rem', color: '#f8fafc' }}>
+              {isLogin ? 'Welcome back' : 'Create an account'}
+            </h1>
+            <p style={{ color: '#94a3b8', fontSize: '0.95rem' }}>
+              {isLogin ? 'Enter your credentials to access your tenant.' : 'Sign up to request workspace access.'}
+            </p>
           </div>
 
-          <form onSubmit={isLogin ? handleLogin : handleRegister} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <form onSubmit={isLogin ? handleLogin : handleRegister} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
             
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              <label style={{ fontSize: '0.85rem', color: '#cbd5e1' }}>Username</label>
+            <div>
+              <label style={{ display: 'block', fontSize: '0.85rem', color: '#cbd5e1', marginBottom: '0.5rem', fontWeight: 500 }}>Username</label>
               <input 
                 type="text" 
                 value={username} 
                 onChange={e => setUsername(e.target.value)}
                 required
-                style={{ padding: '0.75rem', borderRadius: '0.5rem', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', outline: 'none' }} 
+                style={{ 
+                  width: '100%', padding: '0.85rem 1rem', borderRadius: '8px', 
+                  background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', 
+                  color: '#fff', outline: 'none', transition: 'border 0.2s', fontSize: '0.95rem'
+                }} 
+                onFocus={e=>e.currentTarget.style.border='1px solid #38bdf8'}
+                onBlur={e=>e.currentTarget.style.border='1px solid rgba(255,255,255,0.1)'}
               />
             </div>
 
             {!isLogin && (
               <>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                  <label style={{ fontSize: '0.85rem', color: '#cbd5e1' }}>Email</label>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.85rem', color: '#cbd5e1', marginBottom: '0.5rem', fontWeight: 500 }}>Email Address</label>
                   <input 
                     type="email" 
                     value={email} 
                     onChange={e => setEmail(e.target.value)}
                     required
-                    style={{ padding: '0.75rem', borderRadius: '0.5rem', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', outline: 'none' }} 
+                    style={{ 
+                      width: '100%', padding: '0.85rem 1rem', borderRadius: '8px', 
+                      background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', 
+                      color: '#fff', outline: 'none', transition: 'border 0.2s', fontSize: '0.95rem'
+                    }} 
+                    onFocus={e=>e.currentTarget.style.border='1px solid #38bdf8'}
+                    onBlur={e=>e.currentTarget.style.border='1px solid rgba(255,255,255,0.1)'}
                   />
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                  <label style={{ fontSize: '0.85rem', color: '#cbd5e1' }}>Tenant (Workspace) Name</label>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.85rem', color: '#cbd5e1', marginBottom: '0.5rem', fontWeight: 500 }}>Workspace (Tenant) Name</label>
                   <input 
                     type="text" 
                     value={tenantName} 
                     onChange={e => setTenantName(e.target.value)}
                     required
-                    style={{ padding: '0.75rem', borderRadius: '0.5rem', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', outline: 'none' }} 
+                    style={{ 
+                      width: '100%', padding: '0.85rem 1rem', borderRadius: '8px', 
+                      background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', 
+                      color: '#fff', outline: 'none', transition: 'border 0.2s', fontSize: '0.95rem'
+                    }} 
+                    onFocus={e=>e.currentTarget.style.border='1px solid #38bdf8'}
+                    onBlur={e=>e.currentTarget.style.border='1px solid rgba(255,255,255,0.1)'}
                   />
                 </div>
               </>
             )}
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              <label style={{ fontSize: '0.85rem', color: '#cbd5e1' }}>Password</label>
+            <div>
+              <label style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: '#cbd5e1', marginBottom: '0.5rem', fontWeight: 500 }}>
+                <span>Password</span>
+                {isLogin && <a href="#" style={{ color: '#38bdf8', textDecoration: 'none' }}>Forgot?</a>}
+              </label>
               <input 
                 type="password" 
                 value={password} 
                 onChange={e => setPassword(e.target.value)}
                 required
-                style={{ padding: '0.75rem', borderRadius: '0.5rem', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', outline: 'none' }} 
+                style={{ 
+                  width: '100%', padding: '0.85rem 1rem', borderRadius: '8px', 
+                  background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', 
+                  color: '#fff', outline: 'none', transition: 'border 0.2s', fontSize: '0.95rem'
+                }} 
+                onFocus={e=>e.currentTarget.style.border='1px solid #38bdf8'}
+                onBlur={e=>e.currentTarget.style.border='1px solid rgba(255,255,255,0.1)'}
               />
             </div>
 
@@ -133,14 +207,17 @@ export default function LoginRegister() {
               type="submit" 
               disabled={isLoading}
               style={{ 
-                marginTop: '1rem', padding: '0.85rem', borderRadius: '0.5rem', 
-                background: '#3b82f6', color: '#fff', border: 'none', 
-                fontWeight: 600, cursor: isLoading ? 'not-allowed' : 'pointer',
-                display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem'
+                marginTop: '1rem', padding: '0.9rem', borderRadius: '8px', 
+                background: '#2563eb', color: '#fff', border: 'none', 
+                fontWeight: 600, fontSize: '1rem', cursor: isLoading ? 'not-allowed' : 'pointer',
+                display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem',
+                transition: 'background 0.2s'
               }}
+              onMouseOver={e=>{if(!isLoading) e.currentTarget.style.background='#1d4ed8'}}
+              onMouseOut={e=>{if(!isLoading) e.currentTarget.style.background='#2563eb'}}
             >
               {isLogin ? <LogIn size={18} /> : <UserPlus size={18} />}
-              {isLoading ? 'Processing...' : (isLogin ? 'Sign In' : 'Sign Up')}
+              {isLoading ? 'Processing...' : (isLogin ? 'Sign In' : 'Request Access')}
             </button>
           </form>
 
@@ -148,36 +225,19 @@ export default function LoginRegister() {
             {isLogin ? "Don't have an account? " : "Already have an account? "}
             <button 
               onClick={() => setIsLogin(!isLogin)}
-              style={{ background: 'none', border: 'none', color: '#60a5fa', fontWeight: 500, cursor: 'pointer' }}
+              style={{ background: 'none', border: 'none', color: '#38bdf8', fontWeight: 600, cursor: 'pointer', padding: 0 }}
             >
-              {isLogin ? 'Sign up here' : 'Sign in here'}
+              {isLogin ? 'Sign up' : 'Sign in'}
             </button>
           </div>
+          
         </div>
-      </div>
-
-      {/* Right side: Branding/Visual */}
-      <div className="hide-mobile" style={{ flex: 1.2, background: 'linear-gradient(135deg, #0f172a 0%, #020617 100%)', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '4rem', position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', inset: 0, opacity: 0.4, backgroundImage: 'radial-gradient(circle at 50% 50%, #334155 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
         
-        <div style={{ position: 'relative', zIndex: 10, maxWidth: '400px' }}>
-          <div style={{ background: 'rgba(255,255,255,0.05)', padding: '2rem', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)' }}>
-            <Shield size={48} color="#38bdf8" style={{ marginBottom: '1.5rem' }} />
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 400, marginBottom: '1rem' }}>Enterprise-Grade Security</h2>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '1rem', color: '#94a3b8' }}>
-              <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><CheckCircle2 size={16} color="#10b981" /> Strict Data Isolation</li>
-              <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><CheckCircle2 size={16} color="#10b981" /> Role-Based Access Control</li>
-              <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><CheckCircle2 size={16} color="#10b981" /> Fully Encrypted Vectors</li>
-            </ul>
-          </div>
+        {/* Security Badge */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginTop: '2rem', color: '#64748b', fontSize: '0.85rem' }}>
+          <Shield size={16} /> Secured by Hanka Enterprise
         </div>
       </div>
-
-      <style>{`
-        @media (max-width: 768px) {
-          .hide-mobile { display: none !important; }
-        }
-      `}</style>
     </div>
   )
 }
