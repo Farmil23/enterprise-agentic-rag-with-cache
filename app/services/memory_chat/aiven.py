@@ -1,6 +1,7 @@
-from langgraph.checkpoint.memory import MemorySaver
+import sqlite3
+from langgraph.checkpoint.sqlite import SqliteSaver
 
-# Kita gunakan MemorySaver (RAM lokal) agar responnya INSTAN!
-# Aiven Postgres terbukti sangat lambat (memakan waktu 20 detik per node) karena masalah koneksi dari Indonesia ke server luar.
-checkpointer = MemorySaver()
-
+# We use SqliteSaver to persist the conversational state locally so it survives restarts.
+# The 'checkpoints.db' file will be created automatically in the root directory.
+conn = sqlite3.connect("checkpoints.db", check_same_thread=False)
+checkpointer = SqliteSaver(conn)

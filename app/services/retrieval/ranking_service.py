@@ -23,14 +23,9 @@ def _get_ranker() -> Ranker:
 
 
 
-def rerank_documents(query: str, documents: list[str], top_n: int = 5) -> list[str]:
+def rerank_documents(query: str, documents: list[dict], top_n: int = 5) -> list[dict]:
     """
     Refines retrieval results by re-scoring documents against the query semantically.
-    
-    Why FlashRank? 
-    Standard vector search (Cosine Similarity) is fast but mathematically "fuzzy."
-    FlashRank uses a Cross-Encoder approach which is much more precise but usually slow.
-    FlashRank solves this by using highly optimized, quantized ONNX models locally.
     """
     if not documents:
         return []
@@ -43,7 +38,7 @@ def rerank_documents(query: str, documents: list[str], top_n: int = 5) -> list[s
         
         # FlashRank expects a list of dictionaries with 'id' and 'text'
         passages = [
-            {"id": i, "text": doc}
+            {"id": i, "text": doc.get('content', '')}
             for i, doc in enumerate(documents)
         ]
 
@@ -53,7 +48,8 @@ def rerank_documents(query: str, documents: list[str], top_n: int = 5) -> list[s
         # Results are returned sorted by highest semantic score first
         reranked_docs = []
         for res in results[:top_n]:
-            reranked_docs.append(res['text'])
+            original_doc = documents[res['id']]
+            reranked_docs.append(original_doc)
 
         duration = time.time() - start_time
         top_score = results[0]['score'] if results else 'N/A'
@@ -63,5 +59,4 @@ def rerank_documents(query: str, documents: list[str], top_n: int = 5) -> list[s
 
     except Exception as e:
         logfire.error(f"❌ [Reranker] Semantic Reranking Failed: {e}")
-        # Fallback to the original Qdrant order to ensure the user still gets an answer
         return documents[:top_n]

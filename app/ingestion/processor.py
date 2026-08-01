@@ -35,6 +35,18 @@ def save_processed_locally(data: dict, source_type: str, filename: str, tenant_i
         json.dump(data, f, ensure_ascii=False, indent=2)
     return dest
 
+def ensure_collection(name: str):
+    if name and not qdrant_client.collection_exists(name):
+        dim = get_embedding_dim()
+        qdrant_client.create_collection(
+            collection_name=name,
+            vectors_config=models.VectorParams(
+                size=dim,
+                distance=models.Distance.COSINE,
+            ),
+        )
+        logfire.info(f"Created collection : {name} ({dim}-dim, cosine)")
+
 def process_file(file_path: str, filename: str, source_type: str, tenant_id: str = "default"):
     """Parse -> chunk -> save local -> embed -> index in qdrant"""
     with logfire.span("Processing file", file=filename, source=source_type, tenant=tenant_id):
@@ -72,6 +84,11 @@ def process_file(file_path: str, filename: str, source_type: str, tenant_id: str
             logfire.info(f"Saved processed data -> {local_path}")
             
             target_collection = f"{tenant_id}_knowledge" if tenant_id and tenant_id != "default" else settings.QDRANT_COLLECTION
+            target_cache = f"{tenant_id}_cache" if tenant_id and tenant_id != "default" else getattr(settings, "QDRANT_COLLECTION_CACHE_NAME", None)
+            
+            # Ensure collections exist before trying to index
+            ensure_collection(target_collection)
+            ensure_collection(target_cache)
             
             # EMBED
             with logfire.span("Vectorizing and Indexing"):
@@ -121,19 +138,6 @@ def run_universal_ingestion(base_dir: str, explicit_source_type: str = None, wip
             qdrant_client.delete_collection(target_collection)
             logfire.info(f"Wiped existing collection: {target_collection}")
             
-        dim = get_embedding_dim()
-        
-        def ensure_collection(name):
-            if name and not qdrant_client.collection_exists(name):
-                qdrant_client.create_collection(
-                    collection_name=name,
-                    vectors_config=models.VectorParams(
-                        size=dim,
-                        distance=models.Distance.COSINE,
-                    ),
-                )
-                logfire.info(f"Created collection : {name} ({dim}-dim, cosine)")
-
         ensure_collection(target_collection)
         ensure_collection(target_cache)
             
