@@ -36,22 +36,22 @@ The core brain of the backend operates using the following state-machine archite
 
 ```mermaid
 graph TD
-    A[User Input] --> B{Guardrail Node}
+    A["User Input"] --> B{"Guardrail Node"}
     
-    B -- "Unsafe/Greeting" --> Z[Fast Response / Block]
-    B -- "Safe & Substantive" --> C[Contextualizer Node]
+    B -- "Unsafe/Greeting" --> Z["Fast Response / Block"]
+    B -- "Safe & Substantive" --> C["Contextualizer Node"]
     
-    C --> D[Cache Checker Node]
+    C --> D["Cache Checker Node"]
     
     D -- "Cache Hit (Similar Query Found)" --> Z
-    D -- "Cache Miss" --> E{Intent Planner Node}
+    D -- "Cache Miss" --> E{"Intent Planner Node"}
     
-    E -- "Needs Context" --> F[Retriever Node (Vector Search)]
-    E -- "Conversational" --> G[Responder Node]
+    E -- "Needs Context" --> F["Retriever Node (Vector Search)"]
+    E -- "Conversational" --> G["Responder Node"]
     
     F --> G
     
-    G --> H[Cache Saver Node]
+    G --> H["Cache Saver Node"]
     H --> Z
     
     style B fill:#3b82f6,stroke:#1e3a8a,color:#fff
@@ -66,25 +66,28 @@ graph TD
 ### High-Level Tech Stack Map
 
 ```mermaid
-architecture-beta
-    group frontend(cloud)[Frontend / Client]
-    service ui(internet)[React + Vite] in frontend
+flowchart LR
+    subgraph Frontend ["Frontend / Client"]
+        UI["React + Vite"]
+    end
     
-    group backend(server)[Backend Services]
-    service api(server)[FastAPI Server] in backend
-    service agent(logic)[LangGraph Agents] in backend
-    service auth(disk)[JWT / Client Manager] in backend
+    subgraph Backend ["Backend Services"]
+        API["FastAPI Server"]
+        Agent["LangGraph Agents"]
+        Auth["JWT / Client Manager"]
+    end
     
-    group storage(database)[Storage Layer]
-    service qdrant(database)[Qdrant Vector DB] in storage
-    service pg(database)[PostgreSQL Memory/Users] in storage
+    subgraph Storage ["Storage Layer"]
+        Qdrant[("Qdrant Vector DB")]
+        PG[("PostgreSQL Memory/Users")]
+    end
     
-    ui:R --> L:api
-    api:B --> T:agent
-    api:R --> L:auth
-    agent:R --> L:qdrant
-    agent:B --> T:pg
-    auth:B --> T:pg
+    UI <--> API
+    API <--> Agent
+    API <--> Auth
+    Agent <--> Qdrant
+    Agent <--> PG
+    Auth <--> PG
 ```
 
 ---
