@@ -19,13 +19,16 @@ def retrieve_node(state: AgentState):
         raw_results = search_enterprise_knowledge(query, limit=15, tenant_id=tenant_id)
         logfire.info(f"Retrieved {len(raw_results)} candidates from Vector DB")
         
-        doc_contents = [doc['content'] for doc in raw_results]
-        
         with logfire.span("⚖️ Semantic Reranking"):
-            reranked_contents = rerank_documents(query, doc_contents, top_n=5)
+            reranked_docs = rerank_documents(query, raw_results, top_n=5)
             logfire.info("Reranking complete. Kept top 5 most relevant chunks.")
             
-        formatted_docs = [f"CONTENT: {doc}" for doc in reranked_contents]
+        formatted_docs = []
+        for doc in reranked_docs:
+            formatted_docs.append({
+                "page_content": doc["content"],
+                "metadata": {"source": doc["source"]}
+            })
     
     logfire.info(f"⏱️ [Retriever] Execution Time: {time.time() - start_time:.2f} seconds")
     return {
