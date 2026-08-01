@@ -1,5 +1,8 @@
 from typing import TypedDict, List, Annotated
-import operator
+
+def add_messages(left: List[dict], right: List[dict]) -> List[dict]:
+    combined = left + right
+    return combined[-14:] # Keep only the last 7 conversations (14 messages)
 
 class AgentState(TypedDict):
     
@@ -13,7 +16,7 @@ class AgentState(TypedDict):
     """
     
     # Message akan ada 3 jenis, AI human dan juga tool
-    messages: Annotated[List[dict], operator.add]
+    messages: Annotated[List[dict], add_messages]
     
     # Query yang dimasukkan user dan nantinya yang akan diproses
     current_query : str
@@ -40,4 +43,5 @@ class AgentState(TypedDict):
     # Identitas klien (Multi-Tenancy)
     tenant_id: str
     
-    
+    # Suggested Questions (Simple Graph)
+    suggested_questions: List[str]

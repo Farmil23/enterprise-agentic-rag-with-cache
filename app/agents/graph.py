@@ -1,13 +1,13 @@
 from langgraph.graph import StateGraph, END
 from app.services.memory_chat.aiven import checkpointer
 from app.agents.state import AgentState
-from app.agents.nodes.planner import planner_node
-from app.agents.nodes.retriever import retrieve_node
-from app.agents.nodes.responder import generate_node
-from app.agents.nodes.cache_checker import cache_node
-from app.agents.nodes.cache_saver import save_cache_node
-from app.agents.nodes.contextualizer_node import contextualizer_node
-from app.agents.nodes.guardrail import guardrail_node
+from app.agents.nodes.default_graph.planner import planner_node
+from app.agents.nodes.default_graph.retriever import retrieve_node
+from app.agents.nodes.default_graph.responder import generate_node
+from app.agents.nodes.default_graph.cache_checker import cache_node
+from app.agents.nodes.default_graph.cache_saver import save_cache_node
+from app.agents.nodes.default_graph.contextualizer_node import contextualizer_node
+from app.agents.nodes.default_graph.guardrail import guardrail_node
 
 # 1. Initialize the State Graph
 workflow = StateGraph(AgentState)
