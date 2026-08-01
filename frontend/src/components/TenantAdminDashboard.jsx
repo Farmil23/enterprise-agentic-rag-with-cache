@@ -75,11 +75,11 @@ export default function TenantAdminDashboard() {
     try {
       const headers = { 'Authorization': `Bearer ${localStorage.getItem('rag_jwt')}` }
       const [usersRes, insightsRes, allUsersRes, filesRes, logsRes] = await Promise.all([
-        fetch(`${import.meta.env.VITE_API_URL || \'http://localhost:8000\'}/admin/users/pending`, { headers }),
-        fetch(`${import.meta.env.VITE_API_URL || \'http://localhost:8000\'}/admin/insights`, { headers }),
-        fetch(`${import.meta.env.VITE_API_URL || \'http://localhost:8000\'}/admin/users/all`, { headers }),
-        fetch(`${import.meta.env.VITE_API_URL || \'http://localhost:8000\'}/files`, { headers }),
-        fetch(`${import.meta.env.VITE_API_URL || \'http://localhost:8000\'}/admin/tenant/logs`, { headers })
+        fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/admin/users/pending`, { headers }),
+        fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/admin/insights`, { headers }),
+        fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/admin/users/all`, { headers }),
+        fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/files`, { headers }),
+        fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/admin/tenant/logs`, { headers })
       ])
       
       if (usersRes.ok) setPendingUsers((await usersRes.json()).pending_users)
@@ -92,7 +92,7 @@ export default function TenantAdminDashboard() {
 
   const handleStatusUpdate = async (username, status) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || \'http://localhost:8000\'}/admin/users/status`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/admin/users/status`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -137,7 +137,7 @@ export default function TenantAdminDashboard() {
       formData.append('file', uploadFile)
       
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL || \'http://localhost:8000\'}/admin/files/upload`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/admin/files/upload`, {
             method: 'POST',
             headers: { 'Authorization': `Bearer ${localStorage.getItem('rag_jwt')}` },
             body: formData
