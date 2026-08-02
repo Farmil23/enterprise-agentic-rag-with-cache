@@ -16,7 +16,8 @@ from app.ingestion.loaders.text import parse_text
 from app.ingestion.loaders.office import parse_office
 from app.ingestion.chunking.splitter import chunk_text
 
-logfire.configure(service_name="enterprise-ingestion-service")
+if os.getenv("LOGFIRE_TOKEN"):
+    logfire.configure(service_name="enterprise-ingestion-service")
 
 PROCESSED_DATA_DIR = "processed_data"
 
