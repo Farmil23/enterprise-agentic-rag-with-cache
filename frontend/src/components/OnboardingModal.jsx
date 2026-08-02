@@ -188,14 +188,14 @@ export default function OnboardingModal({ userName, tenantName }) {
                     /* Mobile Responsiveness for Modal */
                     @media (max-width: 600px) {
                         .onboarding-modal-content {
-                            max-height: 85vh;
-                            overflow-y: auto;
+                            max-height: 85vh !important;
+                            overflow-y: auto !important;
                         }
                         .onboarding-buttons {
                             flex-direction: column !important;
                         }
                         .onboarding-buttons button {
-                            width: 100%;
+                            width: 100% !important;
                         }
                     }
                 `}</style>
