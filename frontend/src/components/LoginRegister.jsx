@@ -47,17 +47,28 @@ export default function LoginRegister() {
     e.preventDefault()
     setIsLoading(true)
     try {
+      const tenantId = tenantName.toLowerCase().replace(/[^a-z0-9]/g, '_')
+      const payload = { 
+        username, 
+        password, 
+        tenant_id: tenantId, 
+        tenant_name: tenantName,
+        role: "tenant_admin" // Users registering from the landing page create new workspaces
+      }
+      
       const response = await fetch(`${import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:8000' : window.location.origin)}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password, email, tenant_name: tenantName })
+        body: JSON.stringify(payload)
       })
       if (response.ok) {
         alert('Registration successful! Please wait for admin approval.')
         setIsLogin(true)
       } else {
         const err = await response.json()
-        alert(err.detail || 'Registration failed')
+        const errMsg = Array.isArray(err.detail) ? err.detail[0].msg : err.detail
+        alert(errMsg || 'Registration failed')
+
       }
     } catch (err) {
       alert('Error connecting to server')
