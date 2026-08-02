@@ -136,3 +136,5 @@ psycopg-pool
 bcrypt
 python-jose[cryptography]
 pymysql
+
+langgraph-checkpoint-sqlite
