@@ -73,10 +73,10 @@ export default function LandingPage() {
         
         {/* Desktop Links */}
         <div className="nav-links hide-mobile" style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
-          <button onClick={() => scrollToSection('features')} style={{ background: 'none', border: 'none', color: '#94a3b8', fontSize: '0.95rem', fontWeight: 500, cursor: 'pointer', transition: 'color 0.2s' }} onMouseOver={e=>e.currentTarget.style.color='#fff'} onMouseOut={e=>e.currentTarget.style.color='#94a3b8'}>Solutions</button>
-          <button onClick={() => scrollToSection('faq')} style={{ background: 'none', border: 'none', color: '#94a3b8', fontSize: '0.95rem', fontWeight: 500, cursor: 'pointer', transition: 'color 0.2s' }} onMouseOver={e=>e.currentTarget.style.color='#fff'} onMouseOut={e=>e.currentTarget.style.color='#94a3b8'}>FAQ</button>
+          <button onClick={() => scrollToSection('features')} style={{ background: 'none', border: 'none', color: '#94a3b8', fontSize: '0.95rem', fontWeight: 500, cursor: 'pointer', transition: 'color 0.2s' }} onMouseOver={e=>e.currentTarget.style.color='#fff'} onMouseOut={e=>e.currentTarget.style.color='#94a3b8'}>{t('landing.nav_features')}</button>
+          <button onClick={() => scrollToSection('faq')} style={{ background: 'none', border: 'none', color: '#94a3b8', fontSize: '0.95rem', fontWeight: 500, cursor: 'pointer', transition: 'color 0.2s' }} onMouseOver={e=>e.currentTarget.style.color='#fff'} onMouseOut={e=>e.currentTarget.style.color='#94a3b8'}>{t('landing.faq_title')}</button>
           <button style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', fontWeight: 500, padding: '0.5rem 1.25rem', borderRadius: '4px', cursor: 'pointer', transition: 'all 0.2s' }} onMouseOver={e=>e.currentTarget.style.background='rgba(255,255,255,0.05)'} onMouseOut={e=>e.currentTarget.style.background='transparent'}>
-            Book a Demo
+            {t('landing.hero_btn_book')}
           </button>
         </div>
 
@@ -91,7 +91,7 @@ export default function LandingPage() {
               {i18n.language.startsWith('id') ? 'EN' : 'ID'}
           </button>
           <Link to="/login" className="get-started-btn" style={{ textDecoration: 'none', background: '#e2e8f0', color: '#0f172a', fontWeight: 600, padding: '0.55rem 1.5rem', borderRadius: '4px', transition: 'all 0.2s' }} onMouseOver={e=>{e.currentTarget.style.background='#fff'}} onMouseOut={e=>{e.currentTarget.style.background='#e2e8f0'}}>
-            Get Started Free
+            {t('landing.nav_get_started')}
           </Link>
           <button className="mobile-menu-toggle" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} style={{ background: 'none', border: 'none', color: '#f8fafc', cursor: 'pointer', display: 'none', alignItems: 'center', justifyContent: 'center' }}>
             {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
@@ -127,32 +127,33 @@ export default function LandingPage() {
         
         <div className="hero-container" style={{ position: 'relative', zIndex: 10, display: 'flex', width: '100%', maxWidth: '1400px', margin: '0 auto', gap: '4rem' }}>
             <div className="hero-text" style={{ flex: '1', maxWidth: '650px', animation: 'fadeInUp 0.6s ease-out' }}>
-                <h1 className="hero-title" style={{ fontSize: '4.2rem', fontWeight: 800, lineHeight: 1.1, marginBottom: '1.5rem', letterSpacing: '-1px', color: '#f8fafc' }}>
-                    Agentic RAG Platform: Detect Hallucinations and Broken Flows
-                </h1>
-                <p className="hero-subtitle" style={{ fontSize: '1.15rem', color: '#94a3b8', lineHeight: 1.6, marginBottom: '2.5rem', fontWeight: 400 }}>
-                    Deploy autonomous AI evaluators to test your internal knowledge bases across thousands of conversational scenarios. Catch hallucinations, bias, and broken flows before real users do.
-                </p>
-                
-                <div className="hero-buttons" style={{ display: 'flex', gap: '1rem' }}>
-                    <button 
-                        onClick={handleDemoLogin}
-                        disabled={isDemoLoading}
-                        style={{ 
-                            background: '#2563eb', color: '#fff', border: 'none', fontWeight: 500, padding: '0.85rem 1.75rem', 
-                            borderRadius: '4px', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', 
-                            cursor: isDemoLoading ? 'wait' : 'pointer', transition: 'all 0.2s' 
-                        }} 
-                        onMouseOver={e=>{if(!isDemoLoading){e.currentTarget.style.background='#1d4ed8'}}} 
-                        onMouseOut={e=>{if(!isDemoLoading){e.currentTarget.style.background='#2563eb'}}}
-                    >
-                        {isDemoLoading ? 'Loading...' : 'Start free with Demo '} 
-                        <ChevronRight size={16} />
-                    </button>
-                    <Link to="/login" style={{ textDecoration: 'none', background: '#fff', color: '#0f172a', fontWeight: 500, padding: '0.85rem 1.75rem', borderRadius: '4px', fontSize: '1rem', display: 'flex', alignItems: 'center', transition: 'all 0.2s' }} onMouseOver={e=>{e.currentTarget.style.background='#f1f5f9'}} onMouseOut={e=>{e.currentTarget.style.background='#fff'}}>
-                        Start free with Email
-                    </Link>
-                </div>
+                <h1 className="hero-title" style={{ fontSize: '4.5rem', fontWeight: 300, lineHeight: 1.1, margin: '0 0 1.5rem 0', letterSpacing: '-1.5px', color: '#fff' }}>
+                  {t('landing.hero_title_1')}<br/>
+                  <span style={{ fontWeight: 600 }}>{t('landing.hero_title_2')}</span>
+              </h1>
+              <p className="hero-subtitle" style={{ fontSize: '1.15rem', color: '#94a3b8', lineHeight: 1.6, margin: '0 0 2.5rem 0', maxWidth: '500px' }}>
+                  {t('landing.hero_subtitle')}
+              </p>
+              
+              <div className="hero-buttons" style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                  <button 
+                      onClick={handleDemoLogin} 
+                      disabled={isDemoLoading}
+                      style={{ 
+                          background: '#2563eb', color: '#fff', border: 'none', padding: '0.85rem 1.75rem', 
+                          borderRadius: '4px', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', 
+                          cursor: isDemoLoading ? 'wait' : 'pointer', transition: 'all 0.2s' 
+                      }} 
+                      onMouseOver={e=>{if(!isDemoLoading){e.currentTarget.style.background='#1d4ed8'}}} 
+                      onMouseOut={e=>{if(!isDemoLoading){e.currentTarget.style.background='#2563eb'}}}
+                  >
+                      {isDemoLoading ? 'Loading...' : t('landing.hero_btn_demo')} 
+                      <ChevronRight size={16} />
+                  </button>
+                  <Link to="/login" style={{ textDecoration: 'none', background: '#fff', color: '#0f172a', fontWeight: 500, padding: '0.85rem 1.75rem', borderRadius: '4px', fontSize: '1rem', display: 'flex', alignItems: 'center', transition: 'all 0.2s' }} onMouseOver={e=>{e.currentTarget.style.background='#f1f5f9'}} onMouseOut={e=>{e.currentTarget.style.background='#fff'}}>
+                      {t('landing.hero_btn_email')}
+                  </Link>
+              </div>
             </div>
 
             {/* Right side floating UI */}
