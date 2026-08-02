@@ -55,10 +55,10 @@ export default function LandingPage() {
   }
 
   const faqs = [
-      { q: "What is Hanka Agentic RAG?", a: "Hanka is a secure, multi-tenant AI platform that allows your enterprise to query internal documents securely without data leakage." },
-      { q: "How does automated hallucination detection work?", a: "Our proprietary pipeline cross-references multiple chunk sources in real-time, enforcing strict semantic boundaries to prevent fabricated answers." },
-      { q: "What metrics are measured in the Dashboard?", a: "We track search time reduction, query volume, cache hit rates, and user engagement metrics across all your organizational tenants." },
-      { q: "Can I automate regression testing?", a: "Yes, our agentic framework allows for continuous evaluation of document retrieval accuracy against baseline datasets." }
+      { q: t('landing.faq_q1'), a: t('landing.faq_a1') },
+      { q: t('landing.faq_q2'), a: t('landing.faq_a2') },
+      { q: t('landing.faq_q3'), a: t('landing.faq_a3') },
+      { q: t('landing.faq_q4'), a: t('landing.faq_a4') }
   ]
 
   return (
@@ -165,36 +165,36 @@ export default function LandingPage() {
                 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '1rem' }}>
                         <div>
-                            <div style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase' }}>Average Latency</div>
+                            <div style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase' }}>{t('landing.stats_avg_latency')}</div>
                             <div style={{ fontSize: '1.5rem', fontWeight: 600, color: '#38bdf8' }}>1350 <span style={{ fontSize: '0.8rem', color: '#64748b' }}>ms</span></div>
                         </div>
                         <div>
-                            <div style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase' }}>Accuracy Score</div>
+                            <div style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase' }}>{t('landing.stats_acc_score')}</div>
                             <div style={{ fontSize: '1.5rem', fontWeight: 600, color: '#10b981' }}>99.8 <span style={{ fontSize: '0.8rem', color: '#64748b' }}>%</span></div>
                         </div>
                         <div>
-                            <div style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase' }}>Cache Hit Rate</div>
+                            <div style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase' }}>{t('landing.stats_cache_hit')}</div>
                             <div style={{ fontSize: '1.5rem', fontWeight: 600, color: '#a855f7' }}>93 <span style={{ fontSize: '0.8rem', color: '#64748b' }}>%</span></div>
                         </div>
                     </div>
                     
                     <div className="stats-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                         <div>
-                            <div style={{ fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.5rem', color: '#e2e8f0' }}>Quality & Safety</div>
+                            <div style={{ fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.5rem', color: '#e2e8f0' }}>{t('landing.stats_quality')}</div>
                             <div style={{ background: 'rgba(0,0,0,0.3)', padding: '0.75rem', borderRadius: '6px', fontSize: '0.8rem', color: '#94a3b8', display: 'flex', justifyContent: 'space-between' }}>
-                                <span>Bias Detection</span> <span style={{ color: '#10b981' }}>Passed</span>
+                                <span>{t('landing.stats_bias')}</span> <span style={{ color: '#10b981' }}>{t('landing.stats_passed')}</span>
                             </div>
                             <div style={{ background: 'rgba(0,0,0,0.3)', padding: '0.75rem', borderRadius: '6px', fontSize: '0.8rem', color: '#94a3b8', display: 'flex', justifyContent: 'space-between', marginTop: '0.5rem' }}>
-                                <span>Hallucination Detection</span> <span style={{ color: '#10b981' }}>Passed</span>
+                                <span>{t('landing.stats_hallucination')}</span> <span style={{ color: '#10b981' }}>{t('landing.stats_passed')}</span>
                             </div>
                         </div>
                         <div>
-                            <div style={{ fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.5rem', color: '#e2e8f0' }}>Understanding</div>
+                            <div style={{ fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.5rem', color: '#e2e8f0' }}>{t('landing.stats_understanding')}</div>
                             <div style={{ background: 'rgba(0,0,0,0.3)', padding: '0.75rem', borderRadius: '6px', fontSize: '0.8rem', color: '#94a3b8', display: 'flex', justifyContent: 'space-between' }}>
-                                <span>Completeness</span> <span style={{ color: '#38bdf8' }}>High</span>
+                                <span>{t('landing.stats_completeness')}</span> <span style={{ color: '#38bdf8' }}>{t('landing.stats_high')}</span>
                             </div>
                             <div style={{ background: 'rgba(0,0,0,0.3)', padding: '0.75rem', borderRadius: '6px', fontSize: '0.8rem', color: '#94a3b8', display: 'flex', justifyContent: 'space-between', marginTop: '0.5rem' }}>
-                                <span>Context Awareness</span> <span style={{ color: '#38bdf8' }}>High</span>
+                                <span>{t('landing.stats_context')}</span> <span style={{ color: '#38bdf8' }}>{t('landing.stats_high')}</span>
                             </div>
                         </div>
                     </div>
@@ -206,45 +206,45 @@ export default function LandingPage() {
       {/* Features Grid */}
       <section id="features" className="section-padding" style={{ padding: '6rem 4rem', background: '#0a0d1c', position: 'relative', zIndex: 10 }}>
         <h2 className="section-title" style={{ textAlign: 'center', fontSize: '2.8rem', fontWeight: 400, marginBottom: '4rem', color: '#f8fafc' }}>
-            Built for Every Layer of Chatbot QA
+            {t('landing.features_main_title')}
         </h2>
         
         <div className="features-grid" style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.05)' }}>
             
             <div style={{ background: '#0a0d1c', padding: '3rem 2rem', transition: 'background 0.3s' }} onMouseOver={e=>e.currentTarget.style.background='rgba(255,255,255,0.02)'} onMouseOut={e=>e.currentTarget.style.background='#0a0d1c'}>
                 <Database size={24} color="#64748b" style={{ marginBottom: '1.5rem' }} />
-                <h3 style={{ fontSize: '1.2rem', marginBottom: '0.75rem', fontWeight: 400 }}>Project and Environment Management</h3>
-                <p style={{ color: '#64748b', fontSize: '0.9rem', lineHeight: 1.6 }}>Create chatbot test projects, manage environments, and scope variables with bulk creation support.</p>
+                <h3 style={{ fontSize: '1.2rem', marginBottom: '0.75rem', fontWeight: 400 }}>{t('landing.f1_t')}</h3>
+                <p style={{ color: '#64748b', fontSize: '0.9rem', lineHeight: 1.6 }}>{t('landing.f1_d')}</p>
             </div>
             
             <div style={{ background: '#0a0d1c', padding: '3rem 2rem', transition: 'background 0.3s' }} onMouseOver={e=>e.currentTarget.style.background='rgba(255,255,255,0.02)'} onMouseOut={e=>e.currentTarget.style.background='#0a0d1c'}>
-                <Users size={24} color="#64748b" style={{ marginBottom: '1.5rem' }} />
-                <h3 style={{ fontSize: '1.2rem', marginBottom: '0.75rem', fontWeight: 400 }}>Test Profiles and Personas</h3>
-                <p style={{ color: '#64748b', fontSize: '0.9rem', lineHeight: 1.6 }}>Inject reusable test data and run scenarios across a pre-built or custom persona library for targeted chatbot evaluation.</p>
+                <Layers size={24} color="#64748b" style={{ marginBottom: '1.5rem' }} />
+                <h3 style={{ fontSize: '1.2rem', marginBottom: '0.75rem', fontWeight: 400 }}>{t('landing.f2_t')}</h3>
+                <p style={{ color: '#64748b', fontSize: '0.9rem', lineHeight: 1.6 }}>{t('landing.f2_d')}</p>
             </div>
             
             <div style={{ background: '#0a0d1c', padding: '3rem 2rem', transition: 'background 0.3s' }} onMouseOver={e=>e.currentTarget.style.background='rgba(255,255,255,0.02)'} onMouseOut={e=>e.currentTarget.style.background='#0a0d1c'}>
                 <ShieldCheck size={24} color="#64748b" style={{ marginBottom: '1.5rem' }} />
-                <h3 style={{ fontSize: '1.2rem', marginBottom: '0.75rem', fontWeight: 400 }}>Custom Validation Criteria</h3>
-                <p style={{ color: '#64748b', fontSize: '0.9rem', lineHeight: 1.6 }}>Define evidence-based pass/fail rules per chatbot scenario with High/Medium/Low confidence tracking.</p>
+                <h3 style={{ fontSize: '1.2rem', marginBottom: '0.75rem', fontWeight: 400 }}>{t('landing.f3_t')}</h3>
+                <p style={{ color: '#64748b', fontSize: '0.9rem', lineHeight: 1.6 }}>{t('landing.f3_d')}</p>
             </div>
             
             <div style={{ background: '#0a0d1c', padding: '3rem 2rem', transition: 'background 0.3s' }} onMouseOver={e=>e.currentTarget.style.background='rgba(255,255,255,0.02)'} onMouseOut={e=>e.currentTarget.style.background='#0a0d1c'}>
                 <Lock size={24} color="#64748b" style={{ marginBottom: '1.5rem' }} />
-                <h3 style={{ fontSize: '1.2rem', marginBottom: '0.75rem', fontWeight: 400 }}>Security and Infrastructure</h3>
-                <p style={{ color: '#64748b', fontSize: '0.9rem', lineHeight: 1.6 }}>Execute via isolated tenants with optional secure tunnels for firewall-restricted chatbot endpoints.</p>
+                <h3 style={{ fontSize: '1.2rem', marginBottom: '0.75rem', fontWeight: 400 }}>{t('landing.f4_t')}</h3>
+                <p style={{ color: '#64748b', fontSize: '0.9rem', lineHeight: 1.6 }}>{t('landing.f4_d')}</p>
             </div>
             
             <div style={{ background: '#0a0d1c', padding: '3rem 2rem', transition: 'background 0.3s' }} onMouseOver={e=>e.currentTarget.style.background='rgba(255,255,255,0.02)'} onMouseOut={e=>e.currentTarget.style.background='#0a0d1c'}>
                 <Workflow size={24} color="#64748b" style={{ marginBottom: '1.5rem' }} />
-                <h3 style={{ fontSize: '1.2rem', marginBottom: '0.75rem', fontWeight: 400 }}>Scheduling Engine</h3>
-                <p style={{ color: '#64748b', fontSize: '0.9rem', lineHeight: 1.6 }}>Automate chatbot test runs using preset frequencies or full custom cron expressions with IANA timezone support.</p>
+                <h3 style={{ fontSize: '1.2rem', marginBottom: '0.75rem', fontWeight: 400 }}>{t('landing.f5_t')}</h3>
+                <p style={{ color: '#64748b', fontSize: '0.9rem', lineHeight: 1.6 }}>{t('landing.f5_d')}</p>
             </div>
             
             <div style={{ background: '#0a0d1c', padding: '3rem 2rem', transition: 'background 0.3s' }} onMouseOver={e=>e.currentTarget.style.background='rgba(255,255,255,0.02)'} onMouseOut={e=>e.currentTarget.style.background='#0a0d1c'}>
                 <BarChart3 size={24} color="#64748b" style={{ marginBottom: '1.5rem' }} />
-                <h3 style={{ fontSize: '1.2rem', marginBottom: '0.75rem', fontWeight: 400 }}>Observability and Reporting</h3>
-                <p style={{ color: '#64748b', fontSize: '0.9rem', lineHeight: 1.6 }}>Monitor chatbot performance across test runs with unified dashboards, exportable reports, and real-time quality trends.</p>
+                <h3 style={{ fontSize: '1.2rem', marginBottom: '0.75rem', fontWeight: 400 }}>{t('landing.f6_t')}</h3>
+                <p style={{ color: '#64748b', fontSize: '0.9rem', lineHeight: 1.6 }}>{t('landing.f6_d')}</p>
             </div>
         </div>
         
@@ -256,10 +256,10 @@ export default function LandingPage() {
       </section>
 
       {/* FAQ Section */}
-      <section id="faq" className="section-padding" style={{ padding: '8rem 4rem', background: '#070914', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-          <div className="faq-container" style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', gap: '4rem' }}>
-              <div style={{ flex: '1' }}>
-                  <h2 className="section-title text-left" style={{ fontSize: '2.5rem', fontWeight: 400 }}>Frequently asked <br className="hide-mobile"/>questions</h2>
+      <section id="faq" className="section-padding" style={{ padding: '6rem 4rem', background: '#050714', position: 'relative' }}>
+          <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+              <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+                  <h2 className="section-title" style={{ fontSize: '2.5rem', fontWeight: 300, color: '#fff', marginBottom: '1rem' }}>{t('landing.faq_title')}</h2>
               </div>
               <div style={{ flex: '2', display: 'flex', flexDirection: 'column' }}>
                   {faqs.map((faq, idx) => (
@@ -283,44 +283,19 @@ export default function LandingPage() {
       </section>
 
       {/* Footer CTA Section */}
-      <section className="section-padding" style={{ 
-          position: 'relative', 
-          padding: '8rem 4rem', 
-          backgroundImage: 'url(/hero_bg.png)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center'
-      }}>
-          <div style={{ position: 'absolute', inset: 0, background: 'rgba(5,7,20,0.85)' }}></div>
-          
-          <div className="cta-container" style={{ position: 'relative', zIndex: 10, maxWidth: '1200px', width: '100%', display: 'flex', gap: '4rem', alignItems: 'center' }}>
-              <div style={{ flex: 1 }}>
-                  <h2 className="cta-title" style={{ fontSize: '3.5rem', fontWeight: 400, lineHeight: 1.1, marginBottom: '1.5rem' }}>
-                      The Next-Generation Agentic RAG. Try Our Beta.
-                  </h2>
-                  <p className="cta-subtitle" style={{ color: '#94a3b8', marginBottom: '2.5rem', maxWidth: '400px', lineHeight: 1.6 }}>
-                      We are just getting started. Join our exclusive beta program and experience the future of secure enterprise document querying before anyone else.
-                  </p>
-                  <div className="hero-buttons" style={{ display: 'flex', gap: '1rem' }}>
-                      <button style={{ background: '#fff', color: '#000', border: 'none', padding: '0.85rem 1.5rem', borderRadius: '4px', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
-                          Contact Sales <ChevronRight size={16} />
-                      </button>
-                      <button style={{ background: 'transparent', color: '#fff', border: '1px solid rgba(255,255,255,0.3)', padding: '0.85rem 1.5rem', borderRadius: '4px', fontWeight: 500, cursor: 'pointer' }}>
-                          Book a Demo
-                      </button>
-                  </div>
-              </div>
+      <section className="cta-section" style={{ padding: '8rem 4rem', background: 'linear-gradient(to bottom, #050714, #0a0d1c)', position: 'relative', overflow: 'hidden' }}>
+          <div style={{ maxWidth: '1000px', margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 10 }}>
+              <h2 style={{ fontSize: '3.5rem', fontWeight: 300, color: '#fff', marginBottom: '1.5rem', letterSpacing: '-1px' }}>{t('landing.cta_title')}</h2>
+              <p style={{ fontSize: '1.2rem', color: '#94a3b8', marginBottom: '3rem', maxWidth: '600px', margin: '0 auto 3rem auto', lineHeight: 1.6 }}>{t('landing.cta_subtitle')}</p>
               
-              <div className="cta-glass-box" style={{ flex: 1, padding: '2rem', background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px' }}>
-                  <ul className="cta-list" style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '1.5rem', fontSize: '1.5rem', color: 'rgba(255,255,255,0.4)', fontWeight: 300 }}>
-                      <li>Private Slack Channel</li>
-                      <li>Unlimited Manual</li>
-                      <li>Accessibility DevTools Tests</li>
-                      <li style={{ color: '#fff' }}>Advanced access controls</li>
-                      <li>Advanced data retention rules</li>
-                  </ul>
+              <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+                  <Link to="/login" style={{ textDecoration: 'none', background: '#fff', color: '#000', padding: '1rem 2rem', borderRadius: '4px', fontWeight: 600, fontSize: '1.05rem', display: 'flex', alignItems: 'center', gap: '0.5rem', transition: 'transform 0.2s' }} onMouseOver={e=>e.currentTarget.style.transform='translateY(-2px)'} onMouseOut={e=>e.currentTarget.style.transform='none'}>
+                      {t('landing.hero_btn_email')}
+                  </Link>
+                  <button onClick={handleDemoLogin} disabled={isDemoLoading} style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', padding: '1rem 2rem', borderRadius: '4px', fontWeight: 500, fontSize: '1.05rem', cursor: isDemoLoading ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', transition: 'all 0.2s' }} onMouseOver={e=>{if(!isDemoLoading){e.currentTarget.style.background='rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor='rgba(255,255,255,0.4)'}}} onMouseOut={e=>{if(!isDemoLoading){e.currentTarget.style.background='transparent'; e.currentTarget.style.borderColor='rgba(255,255,255,0.2)'}}}>
+                      {isDemoLoading ? <div style={{width:'18px',height:'18px',border:'2px solid rgba(255,255,255,0.3)',borderTop:'2px solid #fff',borderRadius:'50%',animation:'spin 1s linear infinite'}}/> : <Globe size={18}/>}
+                      {t('landing.hero_btn_demo')}
+                  </button>
               </div>
           </div>
       </section>
@@ -366,8 +341,8 @@ export default function LandingPage() {
               }}>
                   <button 
                       onClick={() => setShowPopup(false)}
-                      style={{ position: 'absolute', top: '1rem', right: '1rem', background: 'rgba(0,0,0,0.5)', border: 'none', color: '#fff', padding: '0.5rem', borderRadius: '50%', cursor: 'pointer', zIndex: 20 }}
-                  >
+                      style={{ position: 'absolute', top: '1rem', right: '1rem', background: 'rgba(0,0,0,0.5)', border: 'none', color: '#fff', padding: '0.5rem', borderRadius: '50%', cursor: 'pointer', zIndex: 20
+                  }}>
                       <X size={20} />
                   </button>
                   
