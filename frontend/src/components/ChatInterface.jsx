@@ -784,13 +784,13 @@ export default function ChatInterface() {
             /* Mobile responsiveness for Chat Interface */
             @media (max-width: 768px) {
                 .primary-sidebar {
-                    width: ${primaryVisible ? '60px' : '0px'} !important;
-                    min-width: ${primaryVisible ? '60px' : '0px'} !important;
+                    width: ${primaryVisible ? (primaryExpanded ? '200px' : '60px') : '0px'} !important;
+                    min-width: ${primaryVisible ? (primaryExpanded ? '200px' : '60px') : '0px'} !important;
                     border-right: none !important;
                 }
                 .secondary-sidebar {
-                    width: ${sidebarOpen ? 'calc(100vw - 60px)' : '0px'} !important;
-                    min-width: ${sidebarOpen ? 'calc(100vw - 60px)' : '0px'} !important;
+                    width: ${sidebarOpen ? (primaryExpanded ? 'calc(100vw - 200px)' : 'calc(100vw - 60px)') : '0px'} !important;
+                    min-width: ${sidebarOpen ? (primaryExpanded ? 'calc(100vw - 200px)' : 'calc(100vw - 60px)') : '0px'} !important;
                 }
                 .chat-main-container {
                     display: ${(sidebarOpen || primaryVisible) ? 'none' : 'flex'} !important;
