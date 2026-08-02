@@ -276,7 +276,7 @@ export default function ChatInterface() {
   const hasMoreFiles = tenantFiles.length > 5
 
   return (
-    <div style={{ display: 'flex', width: '100vw', height: '100vh', backgroundColor: '#09090b', color: '#fff', fontFamily: 'Inter, sans-serif', overflow: 'hidden' }}>
+    <div style={{ display: 'flex', width: '100%', height: '100vh', backgroundColor: '#09090b', color: '#fff', fontFamily: 'Inter, sans-serif', overflow: 'hidden' }}>
         
         {/* PRIMARY SIDEBAR (Expandable Navigation) */}
         <div className="primary-sidebar" style={{ 
@@ -593,7 +593,7 @@ export default function ChatInterface() {
                                         Your highly secure, enterprise-grade AI assistant. I have access to your tenant's entire knowledge base. How can I help you today?
                                     </p>
                                     
-                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem', maxWidth: '800px', margin: '0 auto' }}>
+                                    <div className="welcome-prompts-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem', maxWidth: '800px', margin: '0 auto' }}>
                                         {['Summarize the latest document', 'What are our operational SOPs?', 'Find information about company policies', 'Help me draft an email based on recent data'].map((prompt, i) => (
                                             <button key={i} onClick={() => { setInputValue(prompt); textareaRef.current?.focus() }} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)', padding: '1rem', borderRadius: '0.75rem', color: '#e4e4e7', cursor: 'pointer', textAlign: 'left', transition: 'all 0.2s', fontSize: '0.9rem' }} onMouseOver={e=>e.currentTarget.style.background='rgba(255,255,255,0.08)'} onMouseOut={e=>e.currentTarget.style.background='rgba(255,255,255,0.03)'}>
                                                 {prompt}
@@ -797,6 +797,9 @@ export default function ChatInterface() {
                 }
                 .chat-welcome-title {
                     font-size: 1.8rem !important;
+                }
+                .welcome-prompts-grid {
+                    grid-template-columns: 1fr !important;
                 }
                 .mobile-only-close {
                     display: block !important;
