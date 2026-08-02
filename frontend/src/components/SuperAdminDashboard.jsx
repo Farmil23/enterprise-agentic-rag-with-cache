@@ -11,7 +11,7 @@ import remarkGfm from 'remark-gfm'
 
 export default function SuperAdminDashboard() {
   const [activeTab, setActiveTab] = useState('dashboard') // dashboard, tenants, approvals, logs
-  const [sidebarExpanded, setSidebarExpanded] = useState(true)
+  const [sidebarExpanded, setSidebarExpanded] = useState(window.innerWidth > 768)
   
   const [insights, setInsights] = useState(null)
   const [tenants, setTenants] = useState([])
@@ -242,10 +242,10 @@ export default function SuperAdminDashboard() {
   }
 
     return (
-    <div style={{ display: 'flex', width: '100vw', height: '100vh', backgroundColor: '#05070f', color: '#fff', fontFamily: 'Inter, sans-serif', overflow: 'hidden', position: 'relative' }}>
+    <div style={{ display: 'flex', width: '100%', height: '100vh', backgroundColor: '#05070f', color: '#fff', fontFamily: 'Inter, sans-serif', overflow: 'hidden', position: 'relative' }}>
         
         {/* COLLAPSIBLE SIDEBAR */}
-        <div style={{ 
+        <div className="admin-sidebar" style={{ 
             width: sidebarExpanded ? '260px' : '70px', 
             borderRight: '1px solid rgba(255,255,255,0.05)', 
             display: 'flex', 
@@ -307,7 +307,7 @@ export default function SuperAdminDashboard() {
         </div>
 
         {/* MAIN CONTENT AREA */}
-        <div style={{ flex: 1, overflowY: 'auto', padding: '3rem', scrollBehavior: 'smooth', position: 'relative', zIndex: 10 }}>
+        <div className="admin-main" style={{ flex: 1, overflowY: 'auto', padding: '3rem', scrollBehavior: 'smooth', position: 'relative', zIndex: 10 }}>
             <div style={{ maxWidth: '1400px', width: '90%', margin: '0 auto' }}>
                 
                 {/* 1. DASHBOARD TAB */}
@@ -387,7 +387,7 @@ export default function SuperAdminDashboard() {
                             </div>
                         </div>
 
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 350px', gap: '2rem' }}>
+                        <div className="responsive-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 350px', gap: '2rem' }}>
                             {/* Tenant List */}
                             <div style={{ background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '1rem', overflow: 'hidden' }}>
                                 <div style={{ overflowX: 'auto' }}>
@@ -845,6 +845,31 @@ export default function SuperAdminDashboard() {
             .custom-markdown ul, .custom-markdown ol { margin-top: 0; padding-left: 1.5rem; margin-bottom: 1rem; }
             .custom-markdown li { margin-bottom: 0.5rem; }
             .custom-markdown h1, .custom-markdown h2, .custom-markdown h3 { margin-top: 1.5rem; margin-bottom: 0.75rem; color: #fff; }
+
+            /* Mobile Responsiveness */
+            @media (max-width: 768px) {
+                .admin-sidebar {
+                    position: absolute !important;
+                    height: 100vh !important;
+                    width: ${sidebarExpanded ? '100%' : '70px'} !important;
+                }
+                .admin-main {
+                    padding: 1.5rem 1rem !important;
+                    display: ${sidebarExpanded ? 'none' : 'block'} !important;
+                    margin-left: 70px !important;
+                    width: calc(100% - 70px) !important;
+                }
+                .responsive-grid {
+                    grid-template-columns: 1fr !important;
+                }
+                .responsive-flex {
+                    flex-direction: column !important;
+                }
+                .user-selector {
+                    width: 100% !important;
+                    position: static !important;
+                }
+            }
         `}</style>
     </div>
   )

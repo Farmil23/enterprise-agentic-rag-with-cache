@@ -11,7 +11,7 @@ import remarkGfm from 'remark-gfm'
 
 export default function TenantAdminDashboard() {
   const [activeTab, setActiveTab] = useState('dashboard') // dashboard, activity, knowledge, settings
-  const [sidebarExpanded, setSidebarExpanded] = useState(true)
+  const [sidebarExpanded, setSidebarExpanded] = useState(window.innerWidth > 768)
   
   const [pendingUsers, setPendingUsers] = useState([])
   const [insights, setInsights] = useState(null)
@@ -213,10 +213,10 @@ export default function TenantAdminDashboard() {
   })
 
     return (
-    <div style={{ display: 'flex', width: '100vw', height: '100vh', backgroundColor: '#05070f', color: '#fff', fontFamily: 'Inter, sans-serif', overflow: 'hidden', position: 'relative' }}>
+    <div style={{ display: 'flex', width: '100%', height: '100vh', backgroundColor: '#05070f', color: '#fff', fontFamily: 'Inter, sans-serif', overflow: 'hidden', position: 'relative' }}>
         
         {/* COLLAPSIBLE SIDEBAR */}
-        <div style={{ 
+        <div className="admin-sidebar" style={{ 
             width: sidebarExpanded ? '260px' : '70px', 
             borderRight: '1px solid rgba(255,255,255,0.05)', 
             display: 'flex', 
@@ -278,7 +278,7 @@ export default function TenantAdminDashboard() {
         </div>
 
         {/* MAIN CONTENT AREA */}
-        <div style={{ flex: 1, overflowY: 'auto', padding: '3rem', scrollBehavior: 'smooth', position: 'relative', zIndex: 10 }}>
+        <div className="admin-main" style={{ flex: 1, overflowY: 'auto', padding: '3rem', scrollBehavior: 'smooth', position: 'relative', zIndex: 10 }}>
             <div style={{ maxWidth: '1400px', width: '90%', margin: '0 auto' }}>
                 
                 {/* 1. DASHBOARD TAB */}
@@ -380,7 +380,7 @@ export default function TenantAdminDashboard() {
                             <p style={{ margin: 0, color: 'rgba(255,255,255,0.7)', fontSize: '1.05rem' }}>Track queries and AI responses for specific users.</p>
                         </div>
                         
-                        <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
+                        <div className="responsive-flex" style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
                             {/* User Selector */}
                             <div style={{ width: '300px', background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '1rem', padding: '1.5rem', position: 'sticky', top: '0' }}>
                                 <div style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.7)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -835,6 +835,47 @@ export default function TenantAdminDashboard() {
             .custom-markdown ul, .custom-markdown ol { margin-top: 0; padding-left: 1.5rem; margin-bottom: 1rem; }
             .custom-markdown li { margin-bottom: 0.5rem; }
             .custom-markdown h1, .custom-markdown h2, .custom-markdown h3 { margin-top: 1.5rem; margin-bottom: 0.75rem; color: #fff; }
+
+            /* Mobile Responsiveness */
+            @media (max-width: 768px) {
+                .admin-sidebar {
+                    position: absolute !important;
+                    height: 100vh !important;
+                    width: ${sidebarExpanded ? '100%' : '70px'} !important;
+                }
+                .admin-main {
+                    padding: 1rem !important;
+                    display: ${sidebarExpanded ? 'none' : 'block'} !important;
+                    margin-left: 70px !important;
+                }
+                .responsive-grid {
+                    grid-template-columns: 1fr !important;
+                }
+                .responsive-flex {
+                    flex-direction: column !important;
+                }
+            }
+            /* Mobile Responsiveness */
+            @media (max-width: 768px) {
+                .admin-sidebar {
+                    position: absolute !important;
+                    height: 100vh !important;
+                    width: ${sidebarExpanded ? '100%' : '70px'} !important;
+                }
+                .admin-main {
+                    padding: 1.5rem 1rem !important;
+                    display: ${sidebarExpanded ? 'none' : 'block'} !important;
+                    margin-left: 70px !important;
+                    width: calc(100% - 70px) !important;
+                }
+                .responsive-flex {
+                    flex-direction: column !important;
+                }
+                .user-selector {
+                    width: 100% !important;
+                    position: static !important;
+                }
+            }
         `}</style>
     </div>
   )
