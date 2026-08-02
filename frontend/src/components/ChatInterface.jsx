@@ -527,7 +527,7 @@ export default function ChatInterface() {
         </div>
 
         {/* MAIN AREA */}
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', position: 'relative' }}>
+        <div className="chat-main-container" style={{ flex: 1, display: 'flex', flexDirection: 'column', position: 'relative', width: '100%', overflow: 'hidden' }}>
             <header style={{ padding: '1rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                     <button onClick={() => { setSidebarOpen(!sidebarOpen); setPrimaryVisible(!primaryVisible); }} style={{ background: 'transparent', border: 'none', color: '#a1a1aa', cursor: 'pointer' }}>
@@ -784,16 +784,16 @@ export default function ChatInterface() {
             /* Mobile responsiveness for Chat Interface */
             @media (max-width: 768px) {
                 .primary-sidebar {
-                    position: absolute !important;
-                    z-index: 100 !important;
-                    height: 100vh !important;
+                    width: ${primaryVisible ? '60px' : '0px'} !important;
+                    min-width: ${primaryVisible ? '60px' : '0px'} !important;
+                    border-right: none !important;
                 }
                 .secondary-sidebar {
-                    position: absolute !important;
-                    left: 60px !important;
-                    z-index: 90 !important;
-                    height: 100vh !important;
-                    backdrop-filter: blur(10px) !important;
+                    width: ${sidebarOpen ? 'calc(100vw - 60px)' : '0px'} !important;
+                    min-width: ${sidebarOpen ? 'calc(100vw - 60px)' : '0px'} !important;
+                }
+                .chat-main-container {
+                    display: ${(sidebarOpen || primaryVisible) ? 'none' : 'flex'} !important;
                 }
                 .chat-welcome-title {
                     font-size: 1.8rem !important;
