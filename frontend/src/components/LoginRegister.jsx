@@ -11,6 +11,7 @@ export default function LoginRegister() {
   const [tenantName, setTenantName] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   const handleLogin = async (e) => {
     e.preventDefault()
