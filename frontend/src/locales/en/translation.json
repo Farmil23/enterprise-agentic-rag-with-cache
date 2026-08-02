@@ -187,5 +187,23 @@
     "privacy_title_highlight": "Policy",
     "terms_title": "Terms of",
     "terms_title_highlight": "Service"
+  },
+  "waiting": {
+    "title": "Waiting for Approval",
+    "desc_1": "Your account has been successfully registered, but is currently",
+    "desc_pending": "Pending",
+    "desc_2": "Please contact your Tenant Admin to request access approval. Once approved, you can immediately log into the Workspace.",
+    "btn_back": "Back to Login Page"
+  },
+  "onboarding": {
+    "welcome": "Welcome to Enterprise RAG",
+    "connected_to": "You are now connected to workspace",
+    "desc": "This system is designed to help you find information from enterprise documents instantly and accurately.",
+    "f1_title": "Ask Anything",
+    "f1_desc": "Ask technical questions, summarize long documents, or request SOPs. Our AI will answer based on internal data.",
+    "f2_title": "Secure Knowledge Base",
+    "f2_desc": "All your documents are encrypted and isolated specifically for your tenant. No data is cross-shared.",
+    "btn_chat": "Start Chat",
+    "btn_guide": "Read Full Guide"
   }
 }

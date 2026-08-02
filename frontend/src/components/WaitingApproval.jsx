@@ -1,8 +1,10 @@
 import { Clock, ArrowLeft } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 export default function WaitingApproval() {
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   return (
     <div className="login-container">
@@ -14,11 +16,11 @@ export default function WaitingApproval() {
         <div className="login-icon" style={{ margin: '0 auto 1.5rem auto', background: 'rgba(234, 179, 8, 0.1)', color: '#eab308' }}>
           <Clock size={40} className="spin-slow" />
         </div>
-        <h1 style={{ fontSize: '1.75rem', marginBottom: '1rem', color: '#f8fafc' }}>Menunggu Persetujuan</h1>
+        <h1 style={{ fontSize: '1.75rem', marginBottom: '1rem', color: '#f8fafc' }}>{t('waiting.title')}</h1>
         <p style={{ color: '#94a3b8', lineHeight: '1.6', marginBottom: '2rem' }}>
-          Akun Anda telah berhasil didaftarkan, namun saat ini berstatus <strong>Pending</strong>.
+          {t('waiting.desc_1')} <strong>{t('waiting.desc_pending')}</strong>.
           <br /><br />
-          Silakan hubungi Admin Tenant Anda untuk meminta persetujuan akses. Setelah disetujui, Anda dapat langsung masuk ke dalam Workspace.
+          {t('waiting.desc_2')}
         </p>
         
         <button 
@@ -27,7 +29,7 @@ export default function WaitingApproval() {
           style={{ width: 'auto', padding: '0.75rem 2rem', margin: '0 auto', display: 'flex', gap: '0.5rem', alignItems: 'center' }}
         >
           <ArrowLeft size={18} />
-          Kembali ke Halaman Login
+          {t('waiting.btn_back')}
         </button>
       </div>
 

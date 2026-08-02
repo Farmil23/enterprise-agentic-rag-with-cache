@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { X, BookOpen, MessageSquare, FolderOpen, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export default function OnboardingModal({ userName, tenantName }) {
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     useEffect(() => {
         // Cek apakah user sudah pernah melihat onboarding ini
@@ -101,11 +103,11 @@ export default function OnboardingModal({ userName, tenantName }) {
                 {/* Content */}
                 <div style={{ padding: '2rem' }}>
                     <h2 style={{ margin: '0 0 0.5rem 0', fontSize: '1.5rem', color: '#fff', fontWeight: 600 }}>
-                        Selamat datang di Enterprise RAG
+                        {t('onboarding.welcome')}
                     </h2>
                     <p style={{ margin: '0 0 2rem 0', color: '#a1a1aa', lineHeight: 1.6, fontSize: '0.95rem' }}>
-                        Anda sekarang terhubung ke workspace <strong style={{ color: '#fff' }}>{tenantName || 'Anda'}</strong>. 
-                        Sistem ini dirancang untuk membantu Anda menemukan informasi dari dokumen perusahaan secara instan dan akurat.
+                        {t('onboarding.connected_to')} <strong style={{ color: '#fff' }}>{tenantName || 'Anda'}</strong>. 
+                        {t('onboarding.desc')}
                     </p>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', marginBottom: '2.5rem' }}>
@@ -114,9 +116,9 @@ export default function OnboardingModal({ userName, tenantName }) {
                                 <MessageSquare size={20} />
                             </div>
                             <div>
-                                <h4 style={{ margin: '0 0 0.25rem 0', color: '#e4e4e7', fontSize: '1rem' }}>Tanya Apa Saja</h4>
+                                <h4 style={{ margin: '0 0 0.25rem 0', color: '#e4e4e7', fontSize: '1rem' }}>{t('onboarding.f1_title')}</h4>
                                 <p style={{ margin: 0, color: '#a1a1aa', fontSize: '0.85rem', lineHeight: 1.5 }}>
-                                    Ajukan pertanyaan teknis, ringkas dokumen panjang, atau minta SOP. AI kami akan menjawab berdasarkan data internal.
+                                    {t('onboarding.f1_desc')}
                                 </p>
                             </div>
                         </div>
@@ -126,9 +128,9 @@ export default function OnboardingModal({ userName, tenantName }) {
                                 <FolderOpen size={20} />
                             </div>
                             <div>
-                                <h4 style={{ margin: '0 0 0.25rem 0', color: '#e4e4e7', fontSize: '1rem' }}>Knowledge Base Aman</h4>
+                                <h4 style={{ margin: '0 0 0.25rem 0', color: '#e4e4e7', fontSize: '1rem' }}>{t('onboarding.f2_title')}</h4>
                                 <p style={{ margin: 0, color: '#a1a1aa', fontSize: '0.85rem', lineHeight: 1.5 }}>
-                                    Seluruh dokumen Anda dienkripsi dan diisolasi khusus untuk tenant Anda. Tidak ada data yang dibagikan silang.
+                                    {t('onboarding.f2_desc')}
                                 </p>
                             </div>
                         </div>
@@ -155,7 +157,7 @@ export default function OnboardingModal({ userName, tenantName }) {
                             onMouseOver={e => e.currentTarget.style.background = '#2563eb'}
                             onMouseOut={e => e.currentTarget.style.background = '#3b82f6'}
                         >
-                            Mulai Chat <ArrowRight size={18} />
+                            {t('onboarding.btn_chat')} <ArrowRight size={18} />
                         </button>
                         <button 
                             onClick={handleGoToGuide}
@@ -177,7 +179,7 @@ export default function OnboardingModal({ userName, tenantName }) {
                             onMouseOver={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)' }}
                             onMouseOut={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)' }}
                         >
-                            <BookOpen size={18} /> Baca Panduan Lengkap
+                            <BookOpen size={18} /> {t('onboarding.btn_guide')}
                         </button>
                     </div>
                 </div>

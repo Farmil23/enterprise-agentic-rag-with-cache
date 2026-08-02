@@ -187,5 +187,23 @@
     "privacy_title_highlight": "Privasi",
     "terms_title": "Syarat &",
     "terms_title_highlight": "Ketentuan"
+  },
+  "waiting": {
+    "title": "Menunggu Persetujuan",
+    "desc_1": "Akun Anda telah berhasil didaftarkan, namun saat ini berstatus",
+    "desc_pending": "Pending",
+    "desc_2": "Silakan hubungi Admin Tenant Anda untuk meminta persetujuan akses. Setelah disetujui, Anda dapat langsung masuk ke dalam Workspace.",
+    "btn_back": "Kembali ke Halaman Login"
+  },
+  "onboarding": {
+    "welcome": "Selamat datang di Enterprise RAG",
+    "connected_to": "Anda sekarang terhubung ke workspace",
+    "desc": "Sistem ini dirancang untuk membantu Anda menemukan informasi dari dokumen perusahaan secara instan dan akurat.",
+    "f1_title": "Tanya Apa Saja",
+    "f1_desc": "Ajukan pertanyaan teknis, ringkas dokumen panjang, atau minta SOP. AI kami akan menjawab berdasarkan data internal.",
+    "f2_title": "Knowledge Base Aman",
+    "f2_desc": "Seluruh dokumen Anda dienkripsi dan diisolasi khusus untuk tenant Anda. Tidak ada data yang dibagikan silang.",
+    "btn_chat": "Mulai Chat",
+    "btn_guide": "Baca Panduan Lengkap"
   }
 }
