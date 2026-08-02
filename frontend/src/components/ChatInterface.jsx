@@ -566,15 +566,15 @@ export default function ChatInterface() {
                 </main>
             ) : (
                 <>
-                    <main style={{ flex: 1, overflowY: 'auto', padding: '2rem', scrollBehavior: 'smooth' }}>
-                        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                    <main className="chat-main-area" style={{ flex: 1, overflowY: 'auto', padding: '2rem', scrollBehavior: 'smooth' }}>
+                        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '1.5rem', paddingBottom: '2rem' }}>
                             {messages.length <= 1 && !isLoading && (
                                 <div style={{ textAlign: 'center', marginTop: '10vh', animation: 'fadeIn 0.5s ease' }}>
                                     <div style={{ width: '64px', height: '64px', background: 'rgba(59, 130, 246, 0.1)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', border: '1px solid rgba(59, 130, 246, 0.2)' }}>
                                         <Scale size={32} color="#3b82f6" />
                                     </div>
-                                    <h2 style={{ fontSize: '2.5rem', margin: '0 0 1rem 0', fontWeight: 300, letterSpacing: '-0.5px' }}>Welcome to <span style={{fontWeight: 700}}>Hanka</span></h2>
-                                    <p style={{ color: '#a1a1aa', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto 3rem', lineHeight: 1.6 }}>
+                                    <h2 className="chat-welcome-title" style={{ fontSize: '2.5rem', margin: '0 0 1rem 0', fontWeight: 300, letterSpacing: '-0.5px' }}>Welcome to <span style={{fontWeight: 700}}>Hanka</span></h2>
+                                    <p className="chat-welcome-subtitle" style={{ color: '#a1a1aa', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto 3rem', lineHeight: 1.6, padding: '0 1rem' }}>
                                         Your highly secure, enterprise-grade AI assistant. I have access to your tenant's entire knowledge base. How can I help you today?
                                     </p>
                                     
@@ -701,7 +701,7 @@ export default function ChatInterface() {
                         </div>
                     </main>
 
-                    <div style={{ padding: '0 2rem 2rem 2rem' }}>
+                    <div className="chat-input-container" style={{ padding: '0 2rem 2rem 2rem' }}>
                         <form onSubmit={handleSubmit} style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative' }}>
                             <textarea
                                 className="chat-input"
@@ -765,6 +765,27 @@ export default function ChatInterface() {
 
         <OnboardingModal tenantName={tenantId} />
 
+        <style>{`
+            /* Mobile responsiveness for Chat Interface */
+            @media (max-width: 768px) {
+                .chat-welcome-title {
+                    font-size: 1.8rem !important;
+                }
+                .chat-welcome-subtitle {
+                    font-size: 0.95rem !important;
+                    margin-bottom: 2rem !important;
+                }
+                .chat-main-area {
+                    padding: 1rem !important;
+                }
+                .chat-input-container {
+                    padding: 0 1rem 1rem 1rem !important;
+                }
+                .chat-input {
+                    padding-right: 3.5rem !important;
+                }
+            }
+        `}</style>
     </div>
   )
 }
