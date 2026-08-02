@@ -716,8 +716,8 @@ export default function ChatInterface() {
                         </div>
                     </main>
 
-                    <div className="chat-input-container" style={{ padding: '0 2rem 2rem 2rem' }}>
-                        <form onSubmit={handleSubmit} style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative' }}>
+                    <div className="chat-input-container" style={{ width: '100%', boxSizing: 'border-box', padding: '0 2rem 2rem 2rem' }}>
+                        <form onSubmit={handleSubmit} style={{ width: '100%', maxWidth: '1200px', margin: '0 auto', position: 'relative', boxSizing: 'border-box' }}>
                             <textarea
                                 className="chat-input"
                                 ref={textareaRef}
@@ -728,10 +728,10 @@ export default function ChatInterface() {
                                 disabled={isLoading}
                                 rows={1}
                                 style={{
-                                    width: '100%', padding: '1rem 4.5rem 1rem 1.5rem',
+                                    width: '100%', padding: '1.2rem 4.5rem 1.2rem 1.5rem',
                                     background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
                                     borderRadius: '1.5rem', color: '#fff', fontSize: '1rem', resize: 'none', outline: 'none',
-                                    maxHeight: '150px', overflowY: 'auto'
+                                    maxHeight: '150px', overflowY: 'auto', boxSizing: 'border-box', fontFamily: 'inherit'
                                 }}
                             />
                             <button 
