@@ -12,7 +12,7 @@ export default function ChatInterface() {
   const [messages, setMessages] = useState([])
   const [inputValue, setInputValue] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 768)
   const [tenantFiles, setTenantFiles] = useState([])
   const [chatThreads, setChatThreads] = useState([])
   
@@ -388,8 +388,13 @@ export default function ChatInterface() {
         }}>
             {sidebarOpen && (
                 <>
-                    <div style={{ padding: '1.5rem 1rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                        <div style={{ fontSize: '0.75rem', color: '#a1a1aa', fontWeight: 600, letterSpacing: '1px', marginBottom: '0.5rem' }}>WORKSPACE</div>
+                    <div style={{ padding: '1.5rem 1rem', borderBottom: '1px solid rgba(255,255,255,0.05)', position: 'relative' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <div style={{ fontSize: '0.75rem', color: '#a1a1aa', fontWeight: 600, letterSpacing: '1px', marginBottom: '0.5rem' }}>WORKSPACE</div>
+                            <button className="mobile-only-close" onClick={() => setSidebarOpen(false)} style={{ background: 'none', border: 'none', color: '#a1a1aa', cursor: 'pointer', display: 'none' }}>
+                                <X size={18} />
+                            </button>
+                        </div>
                         <div style={{ fontWeight: 600, fontSize: '1rem', textTransform: 'uppercase', color: '#e4e4e7' }}>{tenantId}</div>
                         <div style={{ fontSize: '0.7rem', color: '#52525b', marginTop: '0.25rem', fontFamily: 'monospace' }}>Session: {threadId.substring(0,16)}...</div>
                     </div>
@@ -405,6 +410,7 @@ export default function ChatInterface() {
                                 onClick={() => {
                                     handleNewChat()
                                     setActiveView('chat')
+                                    if (window.innerWidth <= 768) setSidebarOpen(false)
                                 }}
                                 style={{ 
                                     width: '100%',
@@ -438,6 +444,7 @@ export default function ChatInterface() {
                                         setThreadId(t.thread_id)
                                         localStorage.setItem('rag_session', t.thread_id)
                                         setActiveView('chat')
+                                        if (window.innerWidth <= 768) setSidebarOpen(false)
                                     }}
                                     onMouseOver={e => { if(t.thread_id !== threadId) e.currentTarget.style.background = 'rgba(255,255,255,0.05)' }}
                                     onMouseOut={e => { if(t.thread_id !== threadId) e.currentTarget.style.background = 'transparent' }}
@@ -782,6 +789,9 @@ export default function ChatInterface() {
                 }
                 .chat-welcome-title {
                     font-size: 1.8rem !important;
+                }
+                .mobile-only-close {
+                    display: block !important;
                 }
                 .chat-welcome-subtitle {
                     font-size: 0.95rem !important;
