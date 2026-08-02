@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { 
     LogOut, Users, MessageSquare, CheckCircle, XCircle, 
     FileText, Upload, Download, LayoutDashboard, Activity, 
@@ -10,7 +11,8 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 
 export default function TenantAdminDashboard() {
-  const [activeTab, setActiveTab] = useState('dashboard') // dashboard, activity, knowledge, settings
+  const { t } = useTranslation()
+    const [activeTab, setActiveTab] = useState('dashboard') // dashboard, activity, knowledge, settings
   const [sidebarExpanded, setSidebarExpanded] = useState(window.innerWidth > 768)
   
   const [pendingUsers, setPendingUsers] = useState([])
@@ -143,10 +145,10 @@ export default function TenantAdminDashboard() {
             body: formData
         })
         if (response.ok) {
-            alert("File successfully uploaded and queued for ingestion!")
+            alert(t("tenantAdmin.alert_upload_success"))
             setUploadFile(null)
             fetchData() 
-        } else alert("Upload failed. Please try again.")
+        } else alert(t("tenantAdmin.alert_upload_failed"))
       } catch (error) { console.error(error) } 
       finally { setUploading(false) }
   }
@@ -166,7 +168,7 @@ export default function TenantAdminDashboard() {
               a.click()
               window.URL.revokeObjectURL(url)
               a.remove()
-          } else alert("Download failed. File might be missing.")
+          } else alert(t("tenantAdmin.alert_download_failed"))
       } catch (err) { console.error(err) }
   }
 
@@ -245,16 +247,16 @@ export default function TenantAdminDashboard() {
                 </div>
                 {sidebarExpanded && (
                     <div style={{ fontSize: '0.75rem', color: '#a1a1aa', background: 'rgba(255,255,255,0.05)', padding: '0.35rem 0.6rem', borderRadius: '0.25rem', width: '100%' }}>
-                        Tenant: <strong style={{ color: '#fff' }}>{tenantId.toUpperCase()}</strong>
+                        {t("tenantAdmin.sb_tenant")} <strong style={{ color: '#fff' }}>{tenantId.toUpperCase()}</strong>
                     </div>
                 )}
             </div>
             
             <div style={{ flex: 1, padding: '1.5rem 0', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <SidebarItem id="dashboard" icon={LayoutDashboard} label="Dashboard" />
-                <SidebarItem id="activity" icon={Activity} label="Activity Logs" />
-                <SidebarItem id="knowledge" icon={Database} label="Knowledge Base" />
-                <SidebarItem id="settings" icon={Users} label="User Management" />
+                <SidebarItem id="dashboard" icon={LayoutDashboard} label={t("tenantAdmin.sb_dashboard")} />
+                <SidebarItem id="activity" icon={Activity} label={t("tenantAdmin.sb_activity")} />
+                <SidebarItem id="knowledge" icon={Database} label={t("tenantAdmin.sb_knowledge")} />
+                <SidebarItem id="settings" icon={Users} label={t("tenantAdmin.sb_users")} />
             </div>
             
             <div style={{ padding: '1.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'center' }}>
@@ -269,10 +271,10 @@ export default function TenantAdminDashboard() {
                     }}
                     onMouseOver={e => { e.currentTarget.style.background = 'rgba(239, 68, 68, 0.2)'; e.currentTarget.style.borderStyle = 'solid' }}
                     onMouseOut={e => { e.currentTarget.style.background = 'rgba(239, 68, 68, 0.1)'; e.currentTarget.style.borderStyle = 'dashed' }}
-                    title="Logout"
+                    title={t("tenantAdmin.sb_logout")}
                 >
                     <LogOut size={16} style={{ minWidth: '16px' }} /> 
-                    {sidebarExpanded && <span>Logout</span>}
+                    {sidebarExpanded && <span>{t("tenantAdmin.sb_logout")}</span>}
                 </button>
             </div>
         </div>
@@ -284,21 +286,21 @@ export default function TenantAdminDashboard() {
                 {/* 1. DASHBOARD TAB */}
                 {activeTab === 'dashboard' && (
                     <div style={{ animation: 'fadeIn 0.3s ease-out' }}>
-                        <h2 style={{ fontSize: '2.5rem', margin: '0 0 0.5rem 0', fontWeight: 300, letterSpacing: '-0.5px' }}>Welcome back, <span style={{fontWeight: 700}}>Admin.</span></h2>
-                        <p style={{ color: 'rgba(255,255,255,0.7)', margin: '0 0 3rem 0', fontSize: '1.05rem' }}>Here is a high-level overview of your RAG workspace.</p>
+                        <h2 style={{ fontSize: '2.5rem', margin: '0 0 0.5rem 0', fontWeight: 300, letterSpacing: '-0.5px' }}>{t("tenantAdmin.dash_welcome")} <span style={{fontWeight: 700}}>{t("tenantAdmin.dash_admin")}</span></h2>
+                        <p style={{ color: 'rgba(255,255,255,0.7)', margin: '0 0 3rem 0', fontSize: '1.05rem' }}>{t("tenantAdmin.dash_desc")}</p>
                         
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginBottom: '4rem' }}>
                             <div style={{ background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)', padding: '2.5rem', borderRadius: '1.25rem', boxShadow: '0 10px 30px -10px rgba(0,0,0,0.5)', position: 'relative', overflow: 'hidden' }}>
                                 <div style={{ position: 'absolute', top: '-10px', right: '-10px', opacity: 0.05 }}><Users size={120} /></div>
                                 <h3 style={{ margin: 0, color: '#fff', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600 }}>
-                                    <Users size={18} /> Approved Users
+                                    <Users size={18} /> {t("tenantAdmin.dash_metric_users")}
                                 </h3>
                                 <p style={{ fontSize: '4rem', fontWeight: '300', margin: '1rem 0 0 0', color: '#fff', letterSpacing: '-1px' }}>{insights?.total_users || 0}</p>
                             </div>
                             <div style={{ background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)', padding: '2.5rem', borderRadius: '1.25rem', boxShadow: '0 10px 30px -10px rgba(0,0,0,0.5)', position: 'relative', overflow: 'hidden' }}>
                                 <div style={{ position: 'absolute', top: '-10px', right: '-10px', opacity: 0.05 }}><MessageSquare size={120} /></div>
                                 <h3 style={{ margin: 0, color: '#fff', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600 }}>
-                                    <MessageSquare size={18} /> Total Queries
+                                    <MessageSquare size={18} /> {t("tenantAdmin.dash_metric_queries")}
                                 </h3>
                                 <p style={{ fontSize: '4rem', fontWeight: '300', margin: '1rem 0 0 0', color: '#fff', letterSpacing: '-1px' }}>{insights?.total_queries || 0}</p>
                             </div>
@@ -307,7 +309,7 @@ export default function TenantAdminDashboard() {
                         {/* Charts Section */}
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
                             <div style={{ background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)', padding: '2rem', borderRadius: '1.25rem' }}>
-                                <h3 style={{ margin: '0 0 1.5rem 0', color: '#fff', fontSize: '1.1rem', fontWeight: 600 }}>Queries Over Time</h3>
+                                <h3 style={{ margin: '0 0 1.5rem 0', color: '#fff', fontSize: '1.1rem', fontWeight: 600 }}>{t("tenantAdmin.dash_chart_time")}</h3>
                                 <div style={{ width: '100%', height: '300px' }}>
                                     <ResponsiveContainer width="100%" height="100%">
                                         <LineChart data={queryData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
@@ -322,7 +324,7 @@ export default function TenantAdminDashboard() {
                             </div>
 
                             <div style={{ background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)', padding: '2rem', borderRadius: '1.25rem' }}>
-                                <h3 style={{ margin: '0 0 1.5rem 0', color: '#fff', fontSize: '1.1rem', fontWeight: 600 }}>Active Users</h3>
+                                <h3 style={{ margin: '0 0 1.5rem 0', color: '#fff', fontSize: '1.1rem', fontWeight: 600 }}>{t("tenantAdmin.dash_chart_users")}</h3>
                                 <div style={{ width: '100%', height: '300px' }}>
                                     <ResponsiveContainer width="100%" height="100%">
                                         <BarChart data={userActivityData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
@@ -337,15 +339,15 @@ export default function TenantAdminDashboard() {
                             </div>
                         </div>
 
-                        <h3 style={{ fontSize: '1.3rem', margin: '0 0 1.5rem 0', fontWeight: 600 }}>Quick Actions</h3>
+                        <h3 style={{ fontSize: '1.3rem', margin: '0 0 1.5rem 0', fontWeight: 600 }}>{t("tenantAdmin.dash_quick_actions")}</h3>
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' }}>
                             <div onClick={() => setActiveTab('settings')} style={{ background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)', padding: '1.75rem', borderRadius: '1rem', cursor: 'pointer', transition: 'all 0.2s', display: 'flex', flexDirection: 'column', gap: '1rem' }} onMouseOver={e=>{e.currentTarget.style.background='rgba(255,255,255,0.06)'; e.currentTarget.style.transform='translateY(-4px)'}} onMouseOut={e=>{e.currentTarget.style.background='rgba(255,255,255,0.03)'; e.currentTarget.style.transform='none'}}>
                                 <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(255, 255, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                     <Users size={24} color="#fff" />
                                 </div>
                                 <div>
-                                    <h4 style={{ margin: '0 0 0.25rem 0', fontSize: '1.1rem' }}>Review Users</h4>
-                                    <p style={{ margin: 0, color: 'rgba(255,255,255,0.7)', fontSize: '0.9rem' }}>{pendingUsers.length} pending requests</p>
+                                    <h4 style={{ margin: '0 0 0.25rem 0', fontSize: '1.1rem' }}>{t("tenantAdmin.dash_qa_users_title")}</h4>
+                                    <p style={{ margin: 0, color: 'rgba(255,255,255,0.7)', fontSize: '0.9rem' }}>{t("tenantAdmin.dash_qa_users_desc", { count: pendingUsers.length })}</p>
                                 </div>
                             </div>
                             <div onClick={() => setActiveTab('knowledge')} style={{ background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)', padding: '1.75rem', borderRadius: '1rem', cursor: 'pointer', transition: 'all 0.2s', display: 'flex', flexDirection: 'column', gap: '1rem' }} onMouseOver={e=>{e.currentTarget.style.background='rgba(255,255,255,0.06)'; e.currentTarget.style.transform='translateY(-4px)'}} onMouseOut={e=>{e.currentTarget.style.background='rgba(255,255,255,0.03)'; e.currentTarget.style.transform='none'}}>
@@ -354,7 +356,7 @@ export default function TenantAdminDashboard() {
                                 </div>
                                 <div>
                                     <h4 style={{ margin: '0 0 0.25rem 0', fontSize: '1.1rem' }}>Knowledge Base</h4>
-                                    <p style={{ margin: 0, color: 'rgba(255,255,255,0.7)', fontSize: '0.9rem' }}>Upload & manage files</p>
+                                    <p style={{ margin: 0, color: 'rgba(255,255,255,0.7)', fontSize: '0.9rem' }}>{t("tenantAdmin.dash_qa_kb_desc")}</p>
                                 </div>
                             </div>
                             <div onClick={() => setActiveTab('activity')} style={{ background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)', padding: '1.75rem', borderRadius: '1rem', cursor: 'pointer', transition: 'all 0.2s', display: 'flex', flexDirection: 'column', gap: '1rem' }} onMouseOver={e=>{e.currentTarget.style.background='rgba(255,255,255,0.06)'; e.currentTarget.style.transform='translateY(-4px)'}} onMouseOut={e=>{e.currentTarget.style.background='rgba(255,255,255,0.03)'; e.currentTarget.style.transform='none'}}>
@@ -363,7 +365,7 @@ export default function TenantAdminDashboard() {
                                 </div>
                                 <div>
                                     <h4 style={{ margin: '0 0 0.25rem 0', fontSize: '1.1rem' }}>Activity Logs</h4>
-                                    <p style={{ margin: 0, color: 'rgba(255,255,255,0.7)', fontSize: '0.9rem' }}>Audit system usage</p>
+                                    <p style={{ margin: 0, color: 'rgba(255,255,255,0.7)', fontSize: '0.9rem' }}>{t("tenantAdmin.dash_qa_activity_desc")}</p>
                                 </div>
                             </div>
                         </div>
@@ -375,19 +377,19 @@ export default function TenantAdminDashboard() {
                     <div style={{ animation: 'fadeIn 0.3s ease-out' }}>
                         <div style={{ marginBottom: '3rem' }}>
                             <h2 style={{ fontSize: '2.2rem', margin: '0 0 0.5rem 0', fontWeight: 300, letterSpacing: '-0.5px' }}>
-                                User Activity <span style={{fontWeight: 700}}>Monitoring</span>
+                                {t("tenantAdmin.act_title_1")} <span style={{fontWeight: 700}}>{t("tenantAdmin.act_title_2")}</span>
                             </h2>
-                            <p style={{ margin: 0, color: 'rgba(255,255,255,0.7)', fontSize: '1.05rem' }}>Track queries and AI responses for specific users.</p>
+                            <p style={{ margin: 0, color: 'rgba(255,255,255,0.7)', fontSize: '1.05rem' }}>{t("tenantAdmin.act_desc")}</p>
                         </div>
                         
                         <div className="responsive-flex" style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
                             {/* User Selector */}
                             <div style={{ width: '300px', background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '1rem', padding: '1.5rem', position: 'sticky', top: '0' }}>
                                 <div style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.7)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                    <Search size={14}/> Select User
+                                    <Search size={14}/> {t("tenantAdmin.act_select_user")}
                                 </div>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                                    {usersList.length === 0 && <div style={{ color: '#52525b', fontSize: '0.9rem' }}>No approved users.</div>}
+                                    {usersList.length === 0 && <div style={{ color: '#52525b', fontSize: '0.9rem' }}>{t("tenantAdmin.act_no_users")}</div>}
                                     {usersList.map(u => (
                                         <button 
                                             key={u.username}
@@ -416,14 +418,14 @@ export default function TenantAdminDashboard() {
                                 {!historyUser ? (
                                     <div style={{ padding: '4rem', textAlign: 'center', background: 'rgba(255,255,255,0.01)', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '1rem', color: '#52525b' }}>
                                         <Activity size={48} style={{ marginBottom: '1rem', opacity: 0.5 }} />
-                                        <h3 style={{ margin: '0 0 0.5rem 0', color: '#a1a1aa' }}>Select a user</h3>
-                                        <p style={{ margin: 0 }}>Choose a user from the list to view their activity history.</p>
+                                        <h3 style={{ margin: '0 0 0.5rem 0', color: '#a1a1aa' }}>{t("tenantAdmin.act_empty_title")}</h3>
+                                        <p style={{ margin: 0 }}>{t("tenantAdmin.act_empty_desc")}</p>
                                     </div>
                                 ) : (
                                     <>
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                                             <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                                <Clock size={18} color="#3b82f6"/> Timeline for <span style={{ color: '#fff' }}>{historyUser}</span>
+                                                <Clock size={18} color="#3b82f6"/> {t("tenantAdmin.act_timeline_for")} <span style={{ color: '#fff' }}>{historyUser}</span>
                                             </h3>
                                             
                                             {/* Date Filter Custom Dropdown */}
@@ -438,7 +440,7 @@ export default function TenantAdminDashboard() {
                                                     }}
                                                 >
                                                     <Filter size={14} color="#a1a1aa" />
-                                                    {dateFilter === 'all' ? 'All Time' : dateFilter === 'today' ? 'Today' : dateFilter === 'week' ? 'Past 7 Days' : 'Past 30 Days'}
+                                                    {dateFilter === 'all' ? t('tenantAdmin.act_filter_all') : dateFilter === 'today' ? t('tenantAdmin.act_filter_today') : dateFilter === 'week' ? t('tenantAdmin.act_filter_week') : t('tenantAdmin.act_filter_month')}
                                                     <ChevronDown size={14} color="#a1a1aa" />
                                                 </button>
                                                 
@@ -523,7 +525,7 @@ export default function TenantAdminDashboard() {
                             <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'rgba(168, 85, 247, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
                                 <Upload size={32} color="#a855f7" />
                             </div>
-                            <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.2rem' }}>Upload New Document</h3>
+                            <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.2rem' }}>{t("tenantAdmin.kb_upload_title")}</h3>
                             <p style={{ margin: '0 0 2rem 0', color: '#a1a1aa', fontSize: '0.95rem' }}>Supports PDF, TXT, HTML, DOCX, and PPTX.</p>
                             
                             <form onSubmit={handleFileUpload} style={{ display: 'flex', gap: '1rem', alignItems: 'center', width: '100%', maxWidth: '500px' }}>

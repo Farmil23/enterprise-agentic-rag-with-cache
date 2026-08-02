@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { 
     LogOut, Globe, Shield, Activity, Users, ShieldCheck, 
     Menu, LayoutDashboard, Building2, CheckCircle, XCircle,
@@ -10,7 +11,8 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 
 export default function SuperAdminDashboard() {
-  const [activeTab, setActiveTab] = useState('dashboard') // dashboard, tenants, approvals, logs
+  const { t } = useTranslation()
+    const [activeTab, setActiveTab] = useState('dashboard') // dashboard, tenants, approvals, logs
   const [sidebarExpanded, setSidebarExpanded] = useState(window.innerWidth > 768)
   
   const [insights, setInsights] = useState(null)
@@ -147,15 +149,15 @@ export default function SuperAdminDashboard() {
           })
           const data = await res.json()
           if (res.ok) {
-              setCreateMsg(`Success! API Key: ${data.api_key}`)
+              setCreateMsg(`${t("superAdmin.alert_success_key")}${data.api_key}`)
               setNewTenantId('')
               setNewTenantName('')
               fetchTenants()
           } else {
-              setCreateMsg(`Error: ${data.detail}`)
+              setCreateMsg(`${t("superAdmin.alert_error")}${data.detail}`)
           }
       } catch (err) {
-          setCreateMsg("Connection error.")
+          setCreateMsg(t("superAdmin.alert_conn_error"))
       } finally {
           setIsCreatingTenant(false)
       }
@@ -164,7 +166,7 @@ export default function SuperAdminDashboard() {
   const handleUploadToTenant = async (e) => {
       e.preventDefault()
       if (!uploadFile || !uploadTenant) {
-          setUploadMsg("Please select a tenant and a file.");
+          setUploadMsg(t("superAdmin.alert_select_tenant"));
           return;
       }
       setIsUploading(true)
@@ -185,13 +187,13 @@ export default function SuperAdminDashboard() {
           })
           const data = await res.json()
           if (res.ok) {
-              setUploadMsg(`Success! ${data.message}`)
+              setUploadMsg(`${t("superAdmin.alert_upload_success")}${data.message}`)
               setUploadFile(null)
           } else {
-              setUploadMsg(`Error: ${data.detail}`)
+              setUploadMsg(`${t("superAdmin.alert_error")}${data.detail}`)
           }
       } catch (err) {
-          setUploadMsg("Connection error.")
+          setUploadMsg(t("superAdmin.alert_conn_error"))
       } finally {
           setIsUploading(false)
       }
@@ -280,10 +282,10 @@ export default function SuperAdminDashboard() {
             </div>
             
             <div style={{ flex: 1, padding: '1.5rem 0', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <SidebarItem id="dashboard" icon={LayoutDashboard} label="Global Metrics" />
-                <SidebarItem id="tenants" icon={Building2} label="Tenants" />
-                <SidebarItem id="approvals" icon={ShieldCheck} label="Access Requests" />
-                <SidebarItem id="logs" icon={Activity} label="Global Logs" />
+                <SidebarItem id="dashboard" icon={LayoutDashboard} label={t("superAdmin.sb_metrics")} />
+                <SidebarItem id="tenants" icon={Building2} label={t("superAdmin.sb_tenants")} />
+                <SidebarItem id="approvals" icon={ShieldCheck} label={t("superAdmin.sb_requests")} />
+                <SidebarItem id="logs" icon={Activity} label={t("superAdmin.sb_logs")} />
             </div>
             
             <div style={{ padding: '1.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'center' }}>
@@ -298,10 +300,10 @@ export default function SuperAdminDashboard() {
                     }}
                     onMouseOver={e => { e.currentTarget.style.background = 'rgba(239, 68, 68, 0.2)'; e.currentTarget.style.borderStyle = 'solid' }}
                     onMouseOut={e => { e.currentTarget.style.background = 'rgba(239, 68, 68, 0.1)'; e.currentTarget.style.borderStyle = 'dashed' }}
-                    title="Logout"
+                    title={t("superAdmin.sb_logout")}
                 >
                     <LogOut size={16} style={{ minWidth: '16px' }} /> 
-                    {sidebarExpanded && <span>Logout</span>}
+                    {sidebarExpanded && <span>{t("superAdmin.sb_logout")}</span>}
                 </button>
             </div>
         </div>
@@ -313,14 +315,14 @@ export default function SuperAdminDashboard() {
                 {/* 1. DASHBOARD TAB */}
                 {activeTab === 'dashboard' && (
                     <div style={{ animation: 'fadeIn 0.3s ease-out' }}>
-                        <h2 style={{ fontSize: '2.5rem', margin: '0 0 0.5rem 0', fontWeight: 300, letterSpacing: '-0.5px' }}>Master <span style={{fontWeight: 700}}>Oversight</span></h2>
-                        <p style={{ color: 'rgba(255,255,255,0.7)', margin: '0 0 3rem 0', fontSize: '1.05rem' }}>Global monitoring of all enterprise instances and nodes.</p>
+                        <h2 style={{ fontSize: '2.5rem', margin: '0 0 0.5rem 0', fontWeight: 300, letterSpacing: '-0.5px' }}>{t("superAdmin.dash_title_1")} <span style={{fontWeight: 700}}>{t("superAdmin.dash_title_2")}</span></h2>
+                        <p style={{ color: 'rgba(255,255,255,0.7)', margin: '0 0 3rem 0', fontSize: '1.05rem' }}>{t("superAdmin.dash_desc")}</p>
                         
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginBottom: '4rem' }}>
                             <div style={{ background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)', padding: '2.5rem', borderRadius: '1.25rem', boxShadow: '0 10px 30px -10px rgba(0,0,0,0.5)', position: 'relative', overflow: 'hidden' }}>
                                 <div style={{ position: 'absolute', top: '-10px', right: '-10px', opacity: 0.05 }}><Building2 size={120} /></div>
                                 <h3 style={{ margin: 0, color: '#fff', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600 }}>
-                                    <Building2 size={18} /> Total Tenants
+                                    <Building2 size={18} /> {t("superAdmin.dash_metric_tenants")}
                                 </h3>
                                 <p style={{ fontSize: '3.5rem', margin: '1rem 0 0 0', fontWeight: 300, color: '#fff' }}>{insights?.total_tenants || 0}</p>
                             </div>
@@ -328,7 +330,7 @@ export default function SuperAdminDashboard() {
                             <div style={{ background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)', padding: '2.5rem', borderRadius: '1.25rem', boxShadow: '0 10px 30px -10px rgba(0,0,0,0.5)', position: 'relative', overflow: 'hidden' }}>
                                 <div style={{ position: 'absolute', top: '-10px', right: '-10px', opacity: 0.05 }}><Users size={120} /></div>
                                 <h3 style={{ margin: 0, color: '#fff', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600 }}>
-                                    <Users size={18} /> Global Users
+                                    <Users size={18} /> {t("superAdmin.dash_metric_users")}
                                 </h3>
                                 <p style={{ fontSize: '3.5rem', margin: '1rem 0 0 0', fontWeight: 300, color: '#fff' }}>{insights?.total_users || 0}</p>
                             </div>
@@ -336,7 +338,7 @@ export default function SuperAdminDashboard() {
                             <div style={{ background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)', padding: '2.5rem', borderRadius: '1.25rem', boxShadow: '0 10px 30px -10px rgba(0,0,0,0.5)', position: 'relative', overflow: 'hidden' }}>
                                 <div style={{ position: 'absolute', top: '-10px', right: '-10px', opacity: 0.05 }}><Activity size={120} /></div>
                                 <h3 style={{ margin: 0, color: '#fff', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600 }}>
-                                    <Activity size={18} /> Global Queries
+                                    <Activity size={18} /> {t("superAdmin.dash_metric_queries")}
                                 </h3>
                                 <p style={{ fontSize: '3.5rem', margin: '1rem 0 0 0', fontWeight: 300, color: '#fff' }}>{insights?.total_queries || 0}</p>
                             </div>
@@ -345,7 +347,7 @@ export default function SuperAdminDashboard() {
                         {/* Charts Section */}
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
                             <div style={{ background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)', padding: '2rem', borderRadius: '1.25rem' }}>
-                                <h3 style={{ margin: '0 0 1.5rem 0', color: '#fff', fontSize: '1.1rem', fontWeight: 600 }}>Queries Over Time</h3>
+                                <h3 style={{ margin: '0 0 1.5rem 0', color: '#fff', fontSize: '1.1rem', fontWeight: 600 }}>{t("superAdmin.dash_chart_time")}</h3>
                                 <div style={{ width: '100%', height: '300px' }}>
                                     <ResponsiveContainer width="100%" height="100%">
                                         <LineChart data={queryData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
@@ -360,7 +362,7 @@ export default function SuperAdminDashboard() {
                             </div>
 
                             <div style={{ background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)', padding: '2rem', borderRadius: '1.25rem' }}>
-                                <h3 style={{ margin: '0 0 1.5rem 0', color: '#fff', fontSize: '1.1rem', fontWeight: 600 }}>Users per Tenant</h3>
+                                <h3 style={{ margin: '0 0 1.5rem 0', color: '#fff', fontSize: '1.1rem', fontWeight: 600 }}>{t("superAdmin.dash_chart_users")}</h3>
                                 <div style={{ width: '100%', height: '300px' }}>
                                     <ResponsiveContainer width="100%" height="100%">
                                         <BarChart data={tenantData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
@@ -382,8 +384,8 @@ export default function SuperAdminDashboard() {
                     <div style={{ animation: 'fadeIn 0.3s ease-out' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2rem' }}>
                             <div>
-                                <h2 style={{ fontSize: '2.2rem', margin: '0 0 0.5rem 0', fontWeight: 300, letterSpacing: '-0.5px' }}>Tenant <span style={{fontWeight: 700}}>Instances</span></h2>
-                                <p style={{ color: 'rgba(255,255,255,0.7)', margin: 0 }}>Manage enterprise clients and their API Keys.</p>
+                                <h2 style={{ fontSize: '2.2rem', margin: '0 0 0.5rem 0', fontWeight: 300, letterSpacing: '-0.5px' }}>{t("superAdmin.ten_title_1")} <span style={{fontWeight: 700}}>{t("superAdmin.ten_title_2")}</span></h2>
+                                <p style={{ color: 'rgba(255,255,255,0.7)', margin: 0 }}>{t("superAdmin.ten_desc")}</p>
                             </div>
                         </div>
 
@@ -394,9 +396,9 @@ export default function SuperAdminDashboard() {
                                     <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                                         <thead>
                                             <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)', background: 'rgba(0,0,0,0.2)' }}>
-                                                <th style={{ padding: '1rem 1.5rem', color: 'rgba(255,255,255,0.7)', fontWeight: 500, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Tenant ID</th>
-                                                <th style={{ padding: '1rem 1.5rem', color: 'rgba(255,255,255,0.7)', fontWeight: 500, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Name</th>
-                                                <th style={{ padding: '1rem 1.5rem', color: 'rgba(255,255,255,0.7)', fontWeight: 500, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '1px' }}>API Key</th>
+                                                <th style={{ padding: '1rem 1.5rem', color: 'rgba(255,255,255,0.7)', fontWeight: 500, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '1px' }}>{t("superAdmin.ten_th_id")}</th>
+                                                <th style={{ padding: '1rem 1.5rem', color: 'rgba(255,255,255,0.7)', fontWeight: 500, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '1px' }}>{t("superAdmin.ten_th_name")}</th>
+                                                <th style={{ padding: '1rem 1.5rem', color: 'rgba(255,255,255,0.7)', fontWeight: 500, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '1px' }}>{t("superAdmin.ten_th_key")}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -413,7 +415,7 @@ export default function SuperAdminDashboard() {
                                                 </tr>
                                             ))}
                                             {tenants.length === 0 && (
-                                                <tr><td colSpan="3" style={{ padding: '3rem', textAlign: 'center', color: '#a1a1aa' }}>No tenants found.</td></tr>
+                                                <tr><td colSpan="3" style={{ padding: '3rem', textAlign: 'center', color: '#a1a1aa' }}>{t("superAdmin.ten_empty")}</td></tr>
                                             )}
                                         </tbody>
                                     </table>
@@ -436,7 +438,7 @@ export default function SuperAdminDashboard() {
                                     
                                     <form onSubmit={handleCreateTenant} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                                         <div>
-                                            <label style={{ display: 'block', fontSize: '0.85rem', color: '#a1a1aa', marginBottom: '0.5rem' }}>Tenant ID (No Spaces)</label>
+                                            <label style={{ display: 'block', fontSize: '0.85rem', color: '#a1a1aa', marginBottom: '0.5rem' }}>{t("superAdmin.ten_new_id")}</label>
                                             <input 
                                                 type="text" 
                                                 value={newTenantId}
@@ -446,7 +448,7 @@ export default function SuperAdminDashboard() {
                                             />
                                         </div>
                                         <div>
-                                            <label style={{ display: 'block', fontSize: '0.85rem', color: '#a1a1aa', marginBottom: '0.5rem' }}>Display Name</label>
+                                            <label style={{ display: 'block', fontSize: '0.85rem', color: '#a1a1aa', marginBottom: '0.5rem' }}>{t("superAdmin.ten_new_name")}</label>
                                             <input 
                                                 type="text" 
                                                 value={newTenantName}
@@ -533,10 +535,10 @@ export default function SuperAdminDashboard() {
                                 <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                                     <thead>
                                         <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)', background: 'rgba(0,0,0,0.2)' }}>
-                                            <th style={{ padding: '1rem 1.5rem', color: 'rgba(255,255,255,0.7)', fontWeight: 500, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Username</th>
+                                            <th style={{ padding: '1rem 1.5rem', color: 'rgba(255,255,255,0.7)', fontWeight: 500, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '1px' }}>{t("superAdmin.req_th_user")}</th>
                                             <th style={{ padding: '1rem 1.5rem', color: 'rgba(255,255,255,0.7)', fontWeight: 500, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Target Tenant</th>
                                             <th style={{ padding: '1rem 1.5rem', color: 'rgba(255,255,255,0.7)', fontWeight: 500, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Role Requested</th>
-                                            <th style={{ padding: '1rem 1.5rem', color: 'rgba(255,255,255,0.7)', fontWeight: 500, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '1px', textAlign: 'right' }}>Actions</th>
+                                            <th style={{ padding: '1rem 1.5rem', color: 'rgba(255,255,255,0.7)', fontWeight: 500, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '1px', textAlign: 'right' }}>{t("superAdmin.req_th_actions")}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -637,10 +639,10 @@ export default function SuperAdminDashboard() {
                                     onChange={(e) => setLogDateFilter(e.target.value)}
                                     style={{ padding: '0.65rem 1rem', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '0.5rem', color: '#fff', fontSize: '0.85rem', outline: 'none', cursor: 'pointer' }}
                                 >
-                                    <option value="all" style={{ background: '#18181b' }}>All Time</option>
-                                    <option value="today" style={{ background: '#18181b' }}>Today</option>
-                                    <option value="week" style={{ background: '#18181b' }}>Past 7 Days</option>
-                                    <option value="month" style={{ background: '#18181b' }}>Past 30 Days</option>
+                                    <option value="all" style={{ background: '#18181b' }}>{t("superAdmin.log_filter_all")}</option>
+                                    <option value="today" style={{ background: '#18181b' }}>{t("superAdmin.log_filter_today")}</option>
+                                    <option value="week" style={{ background: '#18181b' }}>{t("superAdmin.log_filter_week")}</option>
+                                    <option value="month" style={{ background: '#18181b' }}>{t("superAdmin.log_filter_month")}</option>
                                 </select>
                             </div>
                         </div>
@@ -738,7 +740,7 @@ export default function SuperAdminDashboard() {
                                 <div style={{ color: '#fff', fontWeight: 500, fontSize: '1.1rem' }}>{new Date(selectedLog.time).toLocaleString()}</div>
                             </div>
                             <div style={{ textAlign: 'right' }}>
-                                <div style={{ fontSize: '0.75rem', color: '#a1a1aa', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '0.25rem' }}>Status</div>
+                                <div style={{ fontSize: '0.75rem', color: '#a1a1aa', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '0.25rem' }}>{t("superAdmin.req_th_status")}</div>
                                 <div style={{ color: '#10b981', fontWeight: 600, fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}><CheckCircle size={16}/> Success</div>
                             </div>
                         </div>
