@@ -128,7 +128,7 @@ protobuf
 
 langgraph-checkpoint-postgres
 
-psycopg
+psycopg[binary]
 
 psycopg-pool
 
