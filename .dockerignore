@@ -1,0 +1,14 @@
+.git
+__pycache__/
+*.pyc
+.env
+frontend/node_modules/
+frontend/dist/
+checkpoints.db
+checkpoints.db-shm
+checkpoints.db-wal
+local_database.db
+uploads/
+processed_data/
+*.log
+.logfire/

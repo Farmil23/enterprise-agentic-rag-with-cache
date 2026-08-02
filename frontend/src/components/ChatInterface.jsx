@@ -66,7 +66,7 @@ export default function ChatInterface() {
 
   const fetchFiles = async () => {
     try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/files`, {
+        const res = await fetch(`${import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:8000' : window.location.origin)}/files`, {
             headers: { 'Authorization': `Bearer ${localStorage.getItem('rag_jwt')}` }
         })
         if (res.ok) setTenantFiles((await res.json()).files || [])
@@ -75,7 +75,7 @@ export default function ChatInterface() {
 
   const fetchThreads = async () => {
       try {
-          const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/chat/threads`, {
+          const res = await fetch(`${import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:8000' : window.location.origin)}/chat/threads`, {
               headers: { 'Authorization': `Bearer ${localStorage.getItem('rag_jwt')}` }
           })
           if (res.ok) {
@@ -106,7 +106,7 @@ export default function ChatInterface() {
     if (!threadId) return;
     const fetchHistory = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/history/${threadId}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:8000' : window.location.origin)}/history/${threadId}`, {
             headers: { 'Authorization': `Bearer ${localStorage.getItem('rag_jwt')}` }
         })
         if (response.ok) {
@@ -125,7 +125,7 @@ export default function ChatInterface() {
 
   const handleDownload = async (fileId, filename) => {
       try {
-          const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/files/download/${fileId}`, {
+          const response = await fetch(`${import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:8000' : window.location.origin)}/files/download/${fileId}`, {
               headers: { 'Authorization': `Bearer ${localStorage.getItem('rag_jwt')}` }
           })
           if (response.ok) {
@@ -160,7 +160,7 @@ export default function ChatInterface() {
           return
       }
       try {
-          const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/chat/threads/${editingThreadId}`, {
+          const res = await fetch(`${import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:8000' : window.location.origin)}/chat/threads/${editingThreadId}`, {
               method: 'PUT',
               headers: {
                   'Content-Type': 'application/json',
@@ -212,7 +212,7 @@ export default function ChatInterface() {
     setIsLoading(true)
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/query`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:8000' : window.location.origin)}/query`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -244,7 +244,7 @@ export default function ChatInterface() {
     setIsLoading(true)
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/query`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:8000' : window.location.origin)}/query`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

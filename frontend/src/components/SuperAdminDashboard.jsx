@@ -99,7 +99,7 @@ export default function SuperAdminDashboard() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/admin/insights`, { headers })
+      const response = await fetch(`${import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:8000' : window.location.origin)}/admin/insights`, { headers })
       if (response.ok) {
         const data = await response.json()
         setInsights(data)
@@ -109,7 +109,7 @@ export default function SuperAdminDashboard() {
   
   const fetchTenants = async () => {
       try {
-          const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/admin/super/tenants`, { headers })
+          const res = await fetch(`${import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:8000' : window.location.origin)}/admin/super/tenants`, { headers })
           if (res.ok) {
               const data = await res.json()
               setTenants(data.tenants)
@@ -119,7 +119,7 @@ export default function SuperAdminDashboard() {
   
   const fetchPendingUsers = async () => {
       try {
-          const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/admin/users/pending`, { headers })
+          const res = await fetch(`${import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:8000' : window.location.origin)}/admin/users/pending`, { headers })
           if (res.ok) {
               const data = await res.json()
               setPendingUsers(data.pending_users)
@@ -129,7 +129,7 @@ export default function SuperAdminDashboard() {
   
   const fetchGlobalLogs = async () => {
       try {
-          const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/admin/super/logs`, { headers })
+          const res = await fetch(`${import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:8000' : window.location.origin)}/admin/super/logs`, { headers })
           if (res.ok) {
               const data = await res.json()
               setLogs(data.logs)
@@ -142,7 +142,7 @@ export default function SuperAdminDashboard() {
       setIsCreatingTenant(true)
       setCreateMsg('')
       try {
-          const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/admin/super/tenants`, {
+          const res = await fetch(`${import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:8000' : window.location.origin)}/admin/super/tenants`, {
               method: 'POST',
               headers,
               body: JSON.stringify({ tenant_id: newTenantId, name: newTenantName })
@@ -177,7 +177,7 @@ export default function SuperAdminDashboard() {
       formData.append('target_tenant', uploadTenant)
       
       try {
-          const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/admin/files/upload`, {
+          const res = await fetch(`${import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:8000' : window.location.origin)}/admin/files/upload`, {
               method: 'POST',
               headers: {
                   'Authorization': `Bearer ${localStorage.getItem('rag_jwt')}`
@@ -201,7 +201,7 @@ export default function SuperAdminDashboard() {
 
   const handleUpdateStatus = async (username, status) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/admin/users/status`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:8000' : window.location.origin)}/admin/users/status`, {
         method: 'POST',
         headers,
         body: JSON.stringify({ username, status })

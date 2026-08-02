@@ -12,6 +12,9 @@ import json
 from fastapi.middleware.cors import CORSMiddleware
 from app.agents.graph import rag_agent
 from app.services.auth.client_manager import log_usage, setup_tables, create_chat_thread, rename_chat_thread, get_db_connection
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+import os
 
 from pydantic import BaseModel
 from typing import Optional
@@ -43,11 +46,7 @@ class QueryRequest(BaseModel):
     q: str
     thread_id: Optional[str] = "default_user"
     
-@app.get("/")
-def home():
-    return {
-        "messages" : "Enterprise Agentic RAG Backend is running."
-    }
+# Root path is now handled by the catch_all route for the frontend
     
 @app.get("/graph")
 def get_graph_image():
@@ -183,5 +182,27 @@ def delete_chat_history(thread_id: str, user: dict = Depends(get_current_user)):
                     mcur.execute("DELETE FROM chat_threads WHERE thread_id = %s", (thread_id,))
         return {"status": "success", "message": f"History for thread '{thread_id}' has been permanently deleted."}
     except Exception as e:
-        logfire.error(f"Failed to delete history: {e}")
         return {"status": "error", "message": str(e)}
+
+# --- HUGGING FACE SPACES / SINGLE CONTAINER CONFIGURATION ---
+# Mount the assets directory specifically
+if os.path.isdir("frontend/dist/assets"):
+    app.mount("/assets", StaticFiles(directory="frontend/dist/assets"), name="assets")
+
+@app.api_route("/{path_name:path}", methods=["GET"])
+async def catch_all(path_name: str):
+    # If the user tries to hit an API route that doesn't exist, don't return HTML
+    if path_name.startswith("api/") or path_name in ["query", "graph", "chat/threads"] or path_name.startswith("history/"):
+        raise HTTPException(status_code=404, detail="API endpoint not found")
+    
+    # Try to return the exact file if it exists (e.g. favicon.ico, vite.svg)
+    file_path = os.path.join("frontend/dist", path_name)
+    if os.path.isfile(file_path):
+        return FileResponse(file_path)
+    
+    # Otherwise, return the React index.html for client-side routing
+    index_path = "frontend/dist/index.html"
+    if os.path.isfile(index_path):
+        return FileResponse(index_path)
+    else:
+        return {"message": "Enterprise Agentic RAG Backend is running, but frontend/dist/index.html is missing. Run 'npm run build' in the frontend folder."}
