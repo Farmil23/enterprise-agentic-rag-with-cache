@@ -54,8 +54,8 @@ def get_db_connection():
         return MySQLConnectionWrapper()
         
     url = settings.POSTGRES_URL
-    if "sslmode=require" not in url:
-        url += ("&" if "?" in url else "?") + "sslmode=require"
+    if "sslmode=" not in url:
+        url += ("&" if "?" in url else "?") + "sslmode=disable"
         
     import concurrent.futures
     
