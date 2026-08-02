@@ -39,11 +39,11 @@ export default function LandingPage() {
         localStorage.removeItem('rag_has_seen_onboarding')
         navigate('/chat')
       } else {
-        alert("Demo account not ready. Please make sure backend is seeded.")
+        alert(t('landing.alert_demo_not_ready'))
       }
     } catch (error) {
       console.error(error)
-      alert("Error connecting to server")
+      alert(t('landing.alert_error_server'))
     } finally {
       setIsDemoLoading(false)
     }
@@ -101,10 +101,10 @@ export default function LandingPage() {
         {/* Mobile Menu Dropdown */}
         {isMobileMenuOpen && (
           <div className="mobile-menu" style={{ position: 'absolute', top: '100%', left: 0, right: 0, background: 'rgba(5, 7, 20, 0.95)', backdropFilter: 'blur(16px)', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-            <button onClick={() => { scrollToSection('features'); setIsMobileMenuOpen(false); }} style={{ background: 'none', border: 'none', color: '#f8fafc', fontSize: '1.2rem', fontWeight: 500, cursor: 'pointer', textAlign: 'left' }}>Solutions</button>
-            <button onClick={() => { scrollToSection('faq'); setIsMobileMenuOpen(false); }} style={{ background: 'none', border: 'none', color: '#f8fafc', fontSize: '1.2rem', fontWeight: 500, cursor: 'pointer', textAlign: 'left' }}>FAQ</button>
+            <button onClick={() => { scrollToSection('features'); setIsMobileMenuOpen(false); }} style={{ background: 'none', border: 'none', color: '#f8fafc', fontSize: '1.2rem', fontWeight: 500, cursor: 'pointer', textAlign: 'left' }}>{t('landing.mobile_solutions')}</button>
+            <button onClick={() => { scrollToSection('faq'); setIsMobileMenuOpen(false); }} style={{ background: 'none', border: 'none', color: '#f8fafc', fontSize: '1.2rem', fontWeight: 500, cursor: 'pointer', textAlign: 'left' }}>{t('landing.mobile_faq')}</button>
             <button onClick={() => setIsMobileMenuOpen(false)} style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', fontWeight: 500, padding: '0.75rem', borderRadius: '4px', cursor: 'pointer', fontSize: '1.1rem', textAlign: 'center', marginTop: '1rem' }}>
-              Book a Demo
+              {t('landing.mobile_book')}
             </button>
           </div>
         )}
@@ -147,7 +147,7 @@ export default function LandingPage() {
                       onMouseOver={e=>{if(!isDemoLoading){e.currentTarget.style.background='#1d4ed8'}}} 
                       onMouseOut={e=>{if(!isDemoLoading){e.currentTarget.style.background='#2563eb'}}}
                   >
-                      {isDemoLoading ? 'Loading...' : t('landing.hero_btn_demo')} 
+                      {isDemoLoading ? t('landing.btn_loading') : t('landing.hero_btn_demo')} 
                       <ChevronRight size={16} />
                   </button>
                   <Link to="/login" style={{ textDecoration: 'none', background: '#fff', color: '#0f172a', fontWeight: 500, padding: '0.85rem 1.75rem', borderRadius: '4px', fontSize: '1rem', display: 'flex', alignItems: 'center', transition: 'all 0.2s' }} onMouseOver={e=>{e.currentTarget.style.background='#f1f5f9'}} onMouseOut={e=>{e.currentTarget.style.background='#fff'}}>
@@ -250,7 +250,7 @@ export default function LandingPage() {
         
         <div style={{ textAlign: 'center', marginTop: '4rem' }}>
             <button style={{ background: '#fff', color: '#000', border: 'none', padding: '1rem 2rem', fontSize: '1rem', fontWeight: 500, borderRadius: '4px', cursor: 'pointer' }}>
-                Start Free Testing →
+                {t('landing.btn_start_free')}
             </button>
         </div>
       </section>
@@ -349,25 +349,25 @@ export default function LandingPage() {
                   {/* Left Content */}
                   <div className="modal-content" style={{ flex: 1, padding: '4rem 3rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                       <div style={{ border: '1px solid rgba(255,255,255,0.1)', color: '#94a3b8', padding: '0.35rem 0.85rem', borderRadius: '2rem', fontSize: '0.75rem', width: 'fit-content', marginBottom: '1.5rem', textTransform: 'uppercase', letterSpacing: '1px' }}>
-                          100 Minutes Free Testing
+                          {t('landing.modal_badge')}
                       </div>
                       <h2 className="modal-title" style={{ fontSize: '2.5rem', fontWeight: 300, lineHeight: 1.1, marginBottom: '1rem' }}>
-                          Scalable <span style={{ fontWeight: 600 }}>Agentic</span><br/>
-                          <span style={{ fontWeight: 600 }}>Automation</span> Testing<br/>
-                          on Cloud
+                          {t('landing.modal_title_1')}<span style={{ fontWeight: 600 }}>{t('landing.modal_title_2')}</span><br/>
+                          <span style={{ fontWeight: 600 }}>{t('landing.modal_title_3')}</span>{t('landing.modal_title_4')}<br/>
+                          {t('landing.modal_title_5')}
                       </h2>
                       <p style={{ color: '#94a3b8', fontSize: '1rem', lineHeight: 1.6, marginBottom: '2.5rem' }}>
-                          Execute RAG tests in parallel across massive document sets with a reliable isolated infrastructure.
+                          {t('landing.modal_desc')}
                       </p>
                       
                       <button 
                         onClick={handleDemoLogin}
                         style={{ background: '#fff', color: '#000', border: 'none', padding: '1rem', borderRadius: '4px', fontWeight: 500, fontSize: '1rem', marginBottom: '1rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-                          <Scale size={18} /> Start free with Demo
+                          <Scale size={18} /> {t('landing.modal_btn_demo')}
                       </button>
                       
                       <Link to="/login" style={{ textDecoration: 'none', background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', padding: '1rem', borderRadius: '4px', fontWeight: 500, fontSize: '1rem', textAlign: 'center' }}>
-                          Start free with Email
+                          {t('landing.modal_btn_email')}
                       </Link>
                   </div>
                   
