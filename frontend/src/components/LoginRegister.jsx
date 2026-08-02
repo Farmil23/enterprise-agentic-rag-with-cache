@@ -246,7 +246,7 @@ export default function LoginRegister() {
           
           <div style={{ marginTop: '2.5rem', textAlign: 'center', fontSize: '0.7rem', color: '#9ca3af', lineHeight: 1.6 }}>
             By signing up or using third-party authentication, you agree to Hanka's <br/>
-            <a href="#" style={{color: '#4b5563', fontWeight: 500}}>Terms of Service</a> and acknowledge the <a href="#" style={{color: '#4b5563', fontWeight: 500}}>Privacy Policy</a>.
+            <Link to="/terms" style={{color: '#4b5563', fontWeight: 500, textDecoration: 'none'}}>Terms of Service</Link> and acknowledge the <Link to="/privacy" style={{color: '#4b5563', fontWeight: 500, textDecoration: 'none'}}>Privacy Policy</Link>.
           </div>
           
         </div>
