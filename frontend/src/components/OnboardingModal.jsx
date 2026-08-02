@@ -43,7 +43,7 @@ export default function OnboardingModal({ userName, tenantName }) {
             zIndex: 9999, // Harus paling atas
             animation: 'fadeIn 0.3s ease-out'
         }}>
-            <div style={{
+            <div className="onboarding-modal-content" style={{
                 background: '#18181b', // Zn 900
                 width: '90%',
                 maxWidth: '600px',
@@ -134,7 +134,7 @@ export default function OnboardingModal({ userName, tenantName }) {
                         </div>
                     </div>
 
-                    <div style={{ display: 'flex', gap: '1rem' }}>
+                    <div className="onboarding-buttons" style={{ display: 'flex', gap: '1rem' }}>
                         <button 
                             onClick={handleClose}
                             style={{
@@ -184,6 +184,20 @@ export default function OnboardingModal({ userName, tenantName }) {
                 <style>{`
                     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
                     @keyframes slideUp { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+                    
+                    /* Mobile Responsiveness for Modal */
+                    @media (max-width: 600px) {
+                        .onboarding-modal-content {
+                            max-height: 85vh;
+                            overflow-y: auto;
+                        }
+                        .onboarding-buttons {
+                            flex-direction: column !important;
+                        }
+                        .onboarding-buttons button {
+                            width: 100%;
+                        }
+                    }
                 `}</style>
             </div>
         </div>
