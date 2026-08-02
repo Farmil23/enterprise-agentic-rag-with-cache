@@ -49,7 +49,8 @@ def cache_node ( state: AgentState):
                 logfire.info("Cache Hit, mengeluarkan jawaban dari cache")
                 logfire.info(f"⏱️ [Cache Checker] Execution Time: {time.time() - start_time:.2f} seconds")
                 return {"final_answer" : cached_answer,
-                        "cache_hit": True}
+                        "cache_hit": True,
+                        "messages": [{"role": "assistant", "content": cached_answer}]}
     except Exception as e:
         logfire.error(f"Gagal memeriksa cache Qdrant (Non-fatal, continuing to RAG): {e}")
     

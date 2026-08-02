@@ -25,7 +25,8 @@ def guardrail_node(state: AgentState):
             "is_safe": True,
             "final_answer": "Halo! Ada yang bisa saya bantu hari ini?",
             "status": "Fast-tracked Greeting",
-            "plan": state["plan"] + ["Fast-tracked Greeting"]
+            "plan": state["plan"] + ["Fast-tracked Greeting"],
+            "messages": [{"role": "assistant", "content": "Halo! Ada yang bisa saya bantu hari ini?"}]
         }
     
     with logfire.span("🛡️ AI Guardrail Check"):
@@ -66,7 +67,8 @@ def guardrail_node(state: AgentState):
                     "is_safe": False,
                     "final_answer": "Maaf, permintaan Anda tidak dapat diproses karena terdeteksi melanggar kebijakan keamanan kami.",
                     "status": "Blocked by Guardrail",
-                    "plan": state["plan"] + ["Blocked by Guardrail"]
+                    "plan": state["plan"] + ["Blocked by Guardrail"],
+                    "messages": [{"role": "assistant", "content": "Maaf, permintaan Anda tidak dapat diproses karena terdeteksi melanggar kebijakan keamanan kami."}]
                 }
             else:
                 logfire.info(f"Input is SAFE. Model output: {result_text}")
