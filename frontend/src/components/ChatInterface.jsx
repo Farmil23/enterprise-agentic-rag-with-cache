@@ -3,11 +3,13 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { Send, User, Server, LogOut, PanelLeftClose, PanelLeftOpen, Terminal, FileText, Download, MessageSquarePlus, Edit2, Check, X, MessageSquare, Menu, ChevronDown, ChevronUp, FolderOpen, MoreHorizontal, Copy, BookOpen, Scale, Loader2, Database, BrainCircuit, Search } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import OnboardingModal from './OnboardingModal'
 
 export default function ChatInterface() {
   const [tenantId, setTenantId] = useState(() => localStorage.getItem('rag_tenant') || '')
   const [threadId, setThreadId] = useState(() => localStorage.getItem('rag_session') || '')
+  const { t } = useTranslation()
   
   const [messages, setMessages] = useState([])
   const [inputValue, setInputValue] = useState('')
@@ -32,10 +34,10 @@ export default function ChatInterface() {
 
   // Agentic Loading states
   const loadingSteps = [
-      { text: "Initializing secure session...", icon: <Scale size={14} className="spin-slow" /> },
-      { text: "Scanning enterprise documents...", icon: <Search size={14} className="pulse" /> },
-      { text: "Extracting relevant context...", icon: <Database size={14} className="pulse" /> },
-      { text: "Synthesizing agentic response...", icon: <BrainCircuit size={14} className="pulse" /> }
+      { text: t('chat.init_secure_session'), icon: <Scale size={14} className="spin-slow" /> },
+      { text: t('chat.scan_docs'), icon: <Search size={14} className="pulse" /> },
+      { text: t('chat.extract_context'), icon: <Database size={14} className="pulse" /> },
+      { text: t('chat.synth_response'), icon: <BrainCircuit size={14} className="pulse" /> }
   ]
   const [loadingStepIdx, setLoadingStepIdx] = useState(0)
 
@@ -95,7 +97,9 @@ export default function ChatInterface() {
       const newThreadId = `session_${tenantId}_${Math.random().toString(36).substr(2, 5)}`
       setThreadId(newThreadId)
       localStorage.setItem('rag_session', newThreadId)
-      setMessages([{ role: 'assistant', content: `Halo! Anda memulai sesi baru di workspace **${tenantId.toUpperCase()}**. Ada yang bisa saya bantu hari ini?` }])
+      
+      const greeting = t('chat.new_session_greeting').replace('{{tenant}}', tenantId.toUpperCase())
+      setMessages([{ role: 'assistant', content: greeting }])
   }
 
   useEffect(() => {
@@ -110,7 +114,8 @@ export default function ChatInterface() {
           if (data.messages && data.messages.length > 0) {
             setMessages(data.messages)
           } else {
-            setMessages([{ role: 'assistant', content: `Halo! Anda terhubung ke workspace **${tenantId.toUpperCase()}**. Ada yang bisa saya bantu hari ini?` }])
+            const greeting = t('chat.return_session_greeting').replace('{{tenant}}', tenantId.toUpperCase())
+            setMessages([{ role: 'assistant', content: greeting }])
           }
         }
       } catch (error) { console.error(error) }
@@ -133,7 +138,7 @@ export default function ChatInterface() {
               a.click()
               window.URL.revokeObjectURL(url)
               a.remove()
-          } else alert("Download failed.")
+          } else alert(t('chat.download_failed'))
       } catch (err) { console.error(err) }
   }
 
@@ -226,7 +231,7 @@ export default function ChatInterface() {
         if (messages.length <= 1) fetchThreads()
       } else throw new Error("API request failed")
     } catch (error) {
-      setMessages(prev => [...prev, { role: 'assistant', content: '⚠️ **Error:** Terjadi kesalahan saat menghubungi server.' }])
+      setMessages(prev => [...prev, { role: 'assistant', content: t('chat.api_error') }])
     } finally {
       setIsLoading(false)
     }
@@ -352,12 +357,12 @@ export default function ChatInterface() {
                     transition: 'all 0.2s',
                     justifyContent: primaryExpanded ? 'flex-start' : 'center'
                 }}
-                title="Panduan"
+                title={t('chat.btn_docs')}
                 onMouseOver={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.color = '#fff' }}
                 onMouseOut={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#a1a1aa' }}
             >
                 <BookOpen size={24} style={{ minWidth: '24px' }} />
-                {primaryExpanded && <span style={{ whiteSpace: 'nowrap', fontWeight: 500 }}>Panduan</span>}
+                {primaryExpanded && <span style={{ whiteSpace: 'nowrap', fontWeight: 500 }}>{t('chat.btn_docs')}</span>}
             </button>
             
             <button 
@@ -369,12 +374,12 @@ export default function ChatInterface() {
                     transition: 'all 0.2s',
                     justifyContent: primaryExpanded ? 'flex-start' : 'center'
                 }}
-                title="Logout"
+                title={t('chat.btn_logout')}
                 onMouseOver={e => { e.currentTarget.style.background = 'rgba(239, 68, 68, 0.1)' }}
                 onMouseOut={e => { e.currentTarget.style.background = 'transparent' }}
             >
                 <LogOut size={24} style={{ minWidth: '24px' }} />
-                {primaryExpanded && <span style={{ whiteSpace: 'nowrap', fontWeight: 500 }}>Logout</span>}
+                {primaryExpanded && <span style={{ whiteSpace: 'nowrap', fontWeight: 500 }}>{t('chat.btn_logout')}</span>}
             </button>
         </div>
         
@@ -405,7 +410,7 @@ export default function ChatInterface() {
                         
                         {/* CHAT HISTORY SECTION */}
                         <div style={{ flex: 1 }}>
-                            <div style={{ fontSize: '0.75rem', color: '#a1a1aa', fontWeight: 600, letterSpacing: '1px', marginBottom: '1rem' }}>CHAT HISTORY</div>
+                            <div style={{ fontSize: '0.75rem', color: '#a1a1aa', fontWeight: 600, letterSpacing: '1px', marginBottom: '1rem' }}>{t('chat.chat_history')}</div>
                             
                             {/* NEW CHAT BUTTON */}
                             <button 
@@ -432,7 +437,7 @@ export default function ChatInterface() {
                                 onMouseOver={e => { e.currentTarget.style.background = 'rgba(59, 130, 246, 0.2)'; e.currentTarget.style.borderStyle = 'solid' }}
                                 onMouseOut={e => { e.currentTarget.style.background = 'rgba(59, 130, 246, 0.1)'; e.currentTarget.style.borderStyle = 'dashed' }}
                             >
-                                <MessageSquarePlus size={18} /> Percakapan Baru
+                                <MessageSquarePlus size={18} /> {t('chat.new_chat')}
                             </button>
                             
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', marginBottom: '2rem' }}>
@@ -460,7 +465,7 @@ export default function ChatInterface() {
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', overflow: 'hidden' }}>
                                         <MessageSquare size={14} style={{ minWidth: '14px' }} />
                                         <span style={{ fontSize: '0.85rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                            {t.title || 'New Chat'}
+                                            {t.title || t('chat.new_chat')}
                                         </span>
                                     </div>
                                     
@@ -480,14 +485,14 @@ export default function ChatInterface() {
                             style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', marginBottom: kbExpanded ? '1rem' : '0' }}
                             onClick={() => setKbExpanded(!kbExpanded)}
                         >
-                            <div style={{ fontSize: '0.75rem', color: '#a1a1aa', fontWeight: 600, letterSpacing: '1px' }}>KNOWLEDGE BASE</div>
+                            <div style={{ fontSize: '0.75rem', color: '#a1a1aa', fontWeight: 600, letterSpacing: '1px' }}>{t('chat.knowledge_base').toUpperCase()}</div>
                             {kbExpanded ? <ChevronDown size={14} color="#a1a1aa" /> : <ChevronUp size={14} color="#a1a1aa" />}
                         </div>
                         
                         {kbExpanded && (
                             <>
                                 {tenantFiles.length === 0 ? (
-                                    <div style={{ fontSize: '0.8rem', color: '#52525b', fontStyle: 'italic' }}>No documents available.</div>
+                                    <div style={{ fontSize: '0.8rem', color: '#52525b', fontStyle: 'italic' }}>{t('chat.files_empty')}</div>
                                 ) : (
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
                                         {visibleFiles.map(f => (
@@ -513,7 +518,7 @@ export default function ChatInterface() {
                                                     fontSize: '0.8rem', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem'
                                                 }}
                                             >
-                                                <MoreHorizontal size={14}/> View All {tenantFiles.length} Files
+                                                <MoreHorizontal size={14}/> {t('chat.view_all_files', { count: tenantFiles.length })}
                                             </button>
                                         )}
                                     </div>
@@ -534,7 +539,7 @@ export default function ChatInterface() {
                         {(sidebarOpen || primaryVisible) ? <PanelLeftClose size={20} /> : <PanelLeftOpen size={20} />}
                     </button>
                     <h1 style={{ fontSize: '1.2rem', margin: 0, fontWeight: 500 }}>
-                        {activeView === 'knowledge_base' ? 'Knowledge Base' : 'Hanka Enterprise'}
+                        {activeView === 'knowledge_base' ? t('chat.knowledge_base') : 'Hanka Enterprise'}
                     </h1>
                 </div>
             </header>
@@ -557,8 +562,8 @@ export default function ChatInterface() {
                         {tenantFiles.length === 0 ? (
                             <div style={{ textAlign: 'center', padding: '4rem', background: 'rgba(255,255,255,0.02)', borderRadius: '1rem', border: '1px dashed rgba(255,255,255,0.1)' }}>
                                 <FileText size={48} color="#52525b" style={{ margin: '0 auto 1rem' }} />
-                                <h3 style={{ color: '#e4e4e7', margin: '0 0 0.5rem' }}>No documents available</h3>
-                                <p style={{ color: '#a1a1aa', fontSize: '0.9rem', margin: 0 }}>The Tenant Administrator hasn't uploaded any documents yet.</p>
+                                <h3 style={{ color: '#e4e4e7', margin: '0 0 0.5rem' }}>{t('chat.files_empty')}</h3>
+                                <p style={{ color: '#a1a1aa', fontSize: '0.9rem', margin: 0 }}>{t('chat.files_empty_desc')}</p>
                             </div>
                         ) : (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
@@ -588,9 +593,9 @@ export default function ChatInterface() {
                                     <div style={{ width: '64px', height: '64px', background: 'rgba(59, 130, 246, 0.1)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', border: '1px solid rgba(59, 130, 246, 0.2)' }}>
                                         <Scale size={32} color="#3b82f6" />
                                     </div>
-                                    <h2 className="chat-welcome-title" style={{ fontSize: '2.5rem', margin: '0 0 1rem 0', fontWeight: 300, letterSpacing: '-0.5px' }}>Welcome to <span style={{fontWeight: 700}}>Hanka</span></h2>
+                                    <h2 className="chat-welcome-title" style={{ fontSize: '2.5rem', margin: '0 0 1rem 0', fontWeight: 300, letterSpacing: '-0.5px' }}>{t('chat.welcome_hanka')} <span style={{fontWeight: 700}}>Hanka</span></h2>
                                     <p className="chat-welcome-subtitle" style={{ color: '#a1a1aa', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto 3rem', lineHeight: 1.6, padding: '0 1rem' }}>
-                                        Your highly secure, enterprise-grade AI assistant. I have access to your tenant's entire knowledge base. How can I help you today?
+                                        {t('chat.welcome_subtitle')}
                                     </p>
                                     
                                     <div className="welcome-prompts-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem', maxWidth: '800px', margin: '0 auto' }}>
@@ -632,7 +637,7 @@ export default function ChatInterface() {
                                             {/* SUGGESTED QUESTIONS CHIPS */}
                                             {msg.suggested_questions && msg.suggested_questions.length > 0 && (
                                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '1.5rem' }}>
-                                                    <div style={{ fontSize: '0.75rem', color: '#a1a1aa', fontWeight: 600, letterSpacing: '0.5px' }}>Pertanyaan Lanjutan:</div>
+                                                    <div style={{ fontSize: '0.75rem', color: '#a1a1aa', fontWeight: 600, letterSpacing: '0.5px' }}>{t('chat.suggested_questions')}</div>
                                                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
                                                         {msg.suggested_questions.map((sq, i) => (
                                                             <button 
@@ -724,7 +729,7 @@ export default function ChatInterface() {
                                 value={inputValue}
                                 onChange={handleInput}
                                 onKeyDown={handleKeyDown}
-                                placeholder="Ketik pesan Anda di sini... (Shift + Enter for new line)"
+                                placeholder={t('chat.placeholder_input')}
                                 disabled={isLoading}
                                 rows={1}
                                 style={{
@@ -749,7 +754,7 @@ export default function ChatInterface() {
                             </button>
                         </form>
                         <div style={{ textAlign: 'center', fontSize: '0.75rem', color: '#52525b', margin: '0.75rem 0' }}>
-                            AI can make mistakes. Consider verifying important information.
+                            {t('chat.ai_disclaimer', 'AI can make mistakes. Consider verifying important information.')}
                         </div>
                     </div>
                 </>
@@ -762,7 +767,7 @@ export default function ChatInterface() {
         {renameModalOpen && (
             <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(5px)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
                 <div style={{ background: '#18181b', padding: '2rem', borderRadius: '1rem', width: '90%', maxWidth: '400px', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)' }}>
-                    <h3 style={{ marginTop: 0, marginBottom: '1rem' }}>Rename Chat</h3>
+                    <h3 style={{ marginTop: 0, marginBottom: '1rem' }}>{t('chat.title_rename')}</h3>
                     <input 
                         value={editTitle} 
                         onChange={e => setEditTitle(e.target.value)} 
@@ -771,8 +776,8 @@ export default function ChatInterface() {
                         onKeyDown={e => { if (e.key === 'Enter') handleRename() }}
                     />
                     <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
-                        <button onClick={closeRenameModal} style={{ padding: '0.5rem 1rem', background: 'transparent', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', borderRadius: '0.5rem', cursor: 'pointer' }}>Cancel</button>
-                        <button onClick={handleRename} style={{ padding: '0.5rem 1rem', background: '#3b82f6', border: 'none', color: '#fff', borderRadius: '0.5rem', cursor: 'pointer' }}>Save</button>
+                        <button onClick={closeRenameModal} style={{ padding: '0.5rem 1rem', background: 'transparent', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', borderRadius: '0.5rem', cursor: 'pointer' }}>{t('chat.btn_cancel')}</button>
+                        <button onClick={handleRename} style={{ padding: '0.5rem 1rem', background: '#3b82f6', border: 'none', color: '#fff', borderRadius: '0.5rem', cursor: 'pointer' }}>{t('chat.btn_save')}</button>
                     </div>
                 </div>
             </div>
