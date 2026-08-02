@@ -13,6 +13,7 @@ export default function ChatInterface() {
   const [inputValue, setInputValue] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 768)
+  const [primaryVisible, setPrimaryVisible] = useState(window.innerWidth > 768)
   const [tenantFiles, setTenantFiles] = useState([])
   const [chatThreads, setChatThreads] = useState([])
   
@@ -270,7 +271,7 @@ export default function ChatInterface() {
   }
 
   // Styles
-  const primarySidebarWidth = primaryExpanded ? '200px' : '60px'
+  const primarySidebarWidth = !primaryVisible ? '0px' : (primaryExpanded ? '200px' : '60px')
   const visibleFiles = tenantFiles.slice(0, 5)
   const hasMoreFiles = tenantFiles.length > 5
 
@@ -280,7 +281,8 @@ export default function ChatInterface() {
         {/* PRIMARY SIDEBAR (Expandable Navigation) */}
         <div className="primary-sidebar" style={{ 
             width: primarySidebarWidth, 
-            borderRight: '1px solid rgba(255,255,255,0.1)', 
+            opacity: primaryVisible ? 1 : 0,
+            borderRight: primaryVisible ? '1px solid rgba(255,255,255,0.1)' : 'none', 
             display: 'flex', 
             flexDirection: 'column', 
             padding: '1rem 0', 
@@ -391,7 +393,7 @@ export default function ChatInterface() {
                     <div style={{ padding: '1.5rem 1rem', borderBottom: '1px solid rgba(255,255,255,0.05)', position: 'relative' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <div style={{ fontSize: '0.75rem', color: '#a1a1aa', fontWeight: 600, letterSpacing: '1px', marginBottom: '0.5rem' }}>WORKSPACE</div>
-                            <button className="mobile-only-close" onClick={() => setSidebarOpen(false)} style={{ background: 'none', border: 'none', color: '#a1a1aa', cursor: 'pointer', display: 'none' }}>
+                            <button className="mobile-only-close" onClick={() => { setSidebarOpen(false); setPrimaryVisible(false); }} style={{ background: 'none', border: 'none', color: '#a1a1aa', cursor: 'pointer', display: 'none' }}>
                                 <X size={18} />
                             </button>
                         </div>
@@ -410,7 +412,10 @@ export default function ChatInterface() {
                                 onClick={() => {
                                     handleNewChat()
                                     setActiveView('chat')
-                                    if (window.innerWidth <= 768) setSidebarOpen(false)
+                                    if (window.innerWidth <= 768) {
+                                        setSidebarOpen(false)
+                                        setPrimaryVisible(false)
+                                    }
                                 }}
                                 style={{ 
                                     width: '100%',
@@ -444,7 +449,10 @@ export default function ChatInterface() {
                                         setThreadId(t.thread_id)
                                         localStorage.setItem('rag_session', t.thread_id)
                                         setActiveView('chat')
-                                        if (window.innerWidth <= 768) setSidebarOpen(false)
+                                        if (window.innerWidth <= 768) {
+                                            setSidebarOpen(false)
+                                            setPrimaryVisible(false)
+                                        }
                                     }}
                                     onMouseOver={e => { if(t.thread_id !== threadId) e.currentTarget.style.background = 'rgba(255,255,255,0.05)' }}
                                     onMouseOut={e => { if(t.thread_id !== threadId) e.currentTarget.style.background = 'transparent' }}
@@ -522,8 +530,8 @@ export default function ChatInterface() {
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', position: 'relative' }}>
             <header style={{ padding: '1rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                    <button onClick={() => setSidebarOpen(!sidebarOpen)} style={{ background: 'transparent', border: 'none', color: '#a1a1aa', cursor: 'pointer' }}>
-                        {sidebarOpen ? <PanelLeftClose size={20} /> : <PanelLeftOpen size={20} />}
+                    <button onClick={() => { setSidebarOpen(!sidebarOpen); setPrimaryVisible(!primaryVisible); }} style={{ background: 'transparent', border: 'none', color: '#a1a1aa', cursor: 'pointer' }}>
+                        {(sidebarOpen || primaryVisible) ? <PanelLeftClose size={20} /> : <PanelLeftOpen size={20} />}
                     </button>
                     <h1 style={{ fontSize: '1.2rem', margin: 0, fontWeight: 500 }}>
                         {activeView === 'knowledge_base' ? 'Knowledge Base' : 'Hanka Enterprise'}
