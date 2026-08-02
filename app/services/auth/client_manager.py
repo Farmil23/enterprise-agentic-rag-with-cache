@@ -148,22 +148,22 @@ def setup_tables():
                     )
                 """)
                 
-                # # Create a master tenant if it doesn't exist to bind super_admin
-                # cur.execute("SELECT id FROM tenants WHERE id = 'master'")
-                # if not cur.fetchone():
-                #     cur.execute(
-                #         "INSERT INTO tenants (id, name, api_key) VALUES (%s, %s, %s)",
-                #         ("master", "Master System", f"sk-rag-{uuid.uuid4().hex}")
-                #     )
+                # Create a master tenant if it doesn't exist to bind super_admin
+                cur.execute("SELECT id FROM tenants WHERE id = 'master'")
+                if not cur.fetchone():
+                    cur.execute(
+                        "INSERT INTO tenants (id, name, api_key) VALUES (%s, %s, %s)",
+                        ("master", "Master System", f"sk-rag-{uuid.uuid4().hex}")
+                    )
 
-                # # Seed the Super Admin account
-                # cur.execute("SELECT id FROM users WHERE username = 'badsfarmil'")
-                # if not cur.fetchone():
-                #     super_pwd = get_password_hash("badsfarmil232615")
-                #     cur.execute(
-                #         "INSERT INTO users (username, password_hash, tenant_id, role, status) VALUES (%s, %s, %s, %s, %s)",
-                #         ("badsfarmil", super_pwd, "master", "super_admin", "approved")
-                #     )
+                # Seed the Super Admin account
+                cur.execute("SELECT id FROM users WHERE username = 'badsfarmil'")
+                if not cur.fetchone():
+                    super_pwd = get_password_hash("badsfarmil232615")
+                    cur.execute(
+                        "INSERT INTO users (username, password_hash, tenant_id, role, status) VALUES (%s, %s, %s, %s, %s)",
+                        ("badsfarmil", super_pwd, "master", "super_admin", "approved")
+                    )
                     
                 # Create a demo tenant if it doesn't exist
                 cur.execute("SELECT id FROM tenants WHERE id = 'demo_company'")
@@ -173,14 +173,14 @@ def setup_tables():
                         ("demo_company", "Enterprise Demo", f"sk-rag-{uuid.uuid4().hex}")
                     )
 
-                # # Seed Dummy Tenant Admin
-                # cur.execute("SELECT id FROM users WHERE username = 'admin_tenant_satu'")
-                # if not cur.fetchone():
-                #     admin_pwd = get_password_hash("password")
-                #     cur.execute(
-                #         "INSERT INTO users (username, password_hash, tenant_id, role, status) VALUES (%s, %s, %s, %s, %s)",
-                #         ("admin_tenant_satu", admin_pwd, "demo_tenant", "tenant_admin", "approved")
-                #     )
+                # Seed Dummy Tenant Admin
+                cur.execute("SELECT id FROM users WHERE username = 'admin_tenant_satu'")
+                if not cur.fetchone():
+                    admin_pwd = get_password_hash("password")
+                    cur.execute(
+                        "INSERT INTO users (username, password_hash, tenant_id, role, status) VALUES (%s, %s, %s, %s, %s)",
+                        ("admin_tenant_satu", admin_pwd, "demo_company", "tenant_admin", "approved")
+                    )
 
                 # Seed Demo User
                 cur.execute("SELECT id FROM users WHERE username = 'demo@enterprise.com'")
@@ -191,14 +191,14 @@ def setup_tables():
                         ("demo@enterprise.com", user_pwd, "demo_company", "regular_user", "approved")
                     )
 
-                # # Seed Dummy User 2
-                # cur.execute("SELECT id FROM users WHERE username = 'user_dummie_2'")
-                # if not cur.fetchone():
-                #     user_pwd = get_password_hash("password")
-                #     cur.execute(
-                #         "INSERT INTO users (username, password_hash, tenant_id, role, status) VALUES (%s, %s, %s, %s, %s)",
-                #         ("user_dummie_2", user_pwd, "demo_tenant", "regular_user", "approved")
-                #     )
+                # Seed Dummy User 2
+                cur.execute("SELECT id FROM users WHERE username = 'user_dummie_2'")
+                if not cur.fetchone():
+                    user_pwd = get_password_hash("password")
+                    cur.execute(
+                        "INSERT INTO users (username, password_hash, tenant_id, role, status) VALUES (%s, %s, %s, %s, %s)",
+                        ("user_dummie_2", user_pwd, "demo_company", "regular_user", "approved")
+                    )
 
         logfire.info("✅ Client Management tables verified/created successfully.")
     except Exception as e:
