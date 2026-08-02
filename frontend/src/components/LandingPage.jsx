@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Scale, ShieldCheck, Database, BarChart3, ChevronRight, Globe, Lock, Workflow, Network, Layers, CheckCircle2, Play, Plus, X, MessageSquare, Heart, Menu } from 'lucide-react'
 
 export default function LandingPage() {
@@ -8,6 +9,7 @@ export default function LandingPage() {
   const [showPopup, setShowPopup] = useState(false)
   const [openFaq, setOpenFaq] = useState(null)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const { t, i18n } = useTranslation()
 
   useEffect(() => {
     // Show popup after 10 seconds
@@ -329,16 +331,16 @@ export default function LandingPage() {
               <div style={{ background: '#1e293b', padding: '0.5rem', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <MessageSquare size={20} color="#e2e8f0" />
               </div>
-              <span>© 2026 Hanka. All rights reserved</span>
+              <span>{t('landing.footer_copyright')}</span>
           </div>
           
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              Agentic RAG Platform Built With <Heart size={14} color="#ef4444" fill="#ef4444" /> For Enterprises
+              {t('landing.footer_built_with')} <Heart size={14} color="#ef4444" fill="#ef4444" /> {t('landing.footer_for_enterprises')}
           </div>
 
           <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-              <Link to="/privacy" style={{ color: '#94a3b8', textDecoration: 'none', transition: 'color 0.2s' }} onMouseOver={e=>e.currentTarget.style.color='#fff'} onMouseOut={e=>e.currentTarget.style.color='#94a3b8'}>Privacy Policy</Link>
-              <Link to="/terms" style={{ color: '#94a3b8', textDecoration: 'none', transition: 'color 0.2s' }} onMouseOver={e=>e.currentTarget.style.color='#fff'} onMouseOut={e=>e.currentTarget.style.color='#94a3b8'}>Terms of Service</Link>
+              <Link to="/privacy" style={{ color: '#94a3b8', textDecoration: 'none', transition: 'color 0.2s' }} onMouseOver={e=>e.currentTarget.style.color='#fff'} onMouseOut={e=>e.currentTarget.style.color='#94a3b8'}>{t('landing.footer_privacy')}</Link>
+              <Link to="/terms" style={{ color: '#94a3b8', textDecoration: 'none', transition: 'color 0.2s' }} onMouseOver={e=>e.currentTarget.style.color='#fff'} onMouseOut={e=>e.currentTarget.style.color='#94a3b8'}>{t('landing.footer_terms')}</Link>
           </div>
       </footer>
 

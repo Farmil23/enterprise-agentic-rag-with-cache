@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { Scale, Check } from 'lucide-react'
 
 export default function LoginRegister() {
@@ -230,23 +231,23 @@ export default function LoginRegister() {
 
           <div style={{ display: 'flex', alignItems: 'center', margin: '2rem 0' }}>
             <div style={{ flex: 1, height: '1px', background: '#e5e7eb' }}></div>
-            <span style={{ margin: '0 1rem', fontSize: '0.8rem', color: '#9ca3af', textTransform: 'uppercase' }}>or</span>
+            <span style={{ margin: '0 1rem', fontSize: '0.8rem', color: '#9ca3af', textTransform: 'uppercase' }}>{t('login.or')}</span>
             <div style={{ flex: 1, height: '1px', background: '#e5e7eb' }}></div>
           </div>
 
           <div style={{ textAlign: 'center', fontSize: '0.85rem', color: '#4b5563' }}>
-            {isLogin ? "Don't have an account? " : "Already have an account? "}
+            {isLogin ? t('login.no_account') : t('login.have_account')}
             <button 
               onClick={() => setIsLogin(!isLogin)}
               style={{ background: 'none', border: 'none', color: '#000', fontWeight: 600, cursor: 'pointer', padding: 0, textDecoration: 'underline' }}
             >
-              {isLogin ? 'Sign up' : 'Login'}
+              {isLogin ? t('login.sign_up') : t('login.log_in')}
             </button>
           </div>
           
           <div style={{ marginTop: '2.5rem', textAlign: 'center', fontSize: '0.7rem', color: '#9ca3af', lineHeight: 1.6 }}>
-            By signing up or using third-party authentication, you agree to Hanka's <br/>
-            <Link to="/terms" style={{color: '#4b5563', fontWeight: 500, textDecoration: 'none'}}>Terms of Service</Link> and acknowledge the <Link to="/privacy" style={{color: '#4b5563', fontWeight: 500, textDecoration: 'none'}}>Privacy Policy</Link>.
+            {t('login.terms_agree')} <br/>
+            <Link to="/terms" style={{color: '#4b5563', fontWeight: 500, textDecoration: 'none'}}>{t('legal.terms_title')} {t('legal.terms_title_highlight')}</Link> {t('login.terms_and')} <Link to="/privacy" style={{color: '#4b5563', fontWeight: 500, textDecoration: 'none'}}>{t('legal.privacy_title')} {t('legal.privacy_title_highlight')}</Link>.
           </div>
           
         </div>
