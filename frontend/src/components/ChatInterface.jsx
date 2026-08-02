@@ -278,13 +278,13 @@ export default function ChatInterface() {
     <div style={{ display: 'flex', width: '100vw', height: '100vh', backgroundColor: '#09090b', color: '#fff', fontFamily: 'Inter, sans-serif', overflow: 'hidden' }}>
         
         {/* PRIMARY SIDEBAR (Expandable Navigation) */}
-        <div style={{ 
+        <div className="primary-sidebar" style={{ 
             width: primarySidebarWidth, 
             borderRight: '1px solid rgba(255,255,255,0.1)', 
             display: 'flex', 
             flexDirection: 'column', 
             padding: '1rem 0', 
-            background: 'rgba(24, 24, 27, 0.5)',
+            background: 'rgba(24, 24, 27, 0.95)',
             transition: 'width 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
             overflow: 'hidden'
         }}>
@@ -377,11 +377,11 @@ export default function ChatInterface() {
         </div>
         
         {/* SECONDARY SIDEBAR (Context & History) */}
-        <div style={{ 
+        <div className="secondary-sidebar" style={{ 
             width: sidebarOpen ? '280px' : '0px', 
             opacity: sidebarOpen ? 1 : 0,
             borderRight: sidebarOpen ? '1px solid rgba(255,255,255,0.1)' : 'none', 
-            display: 'flex', flexDirection: 'column', background: 'rgba(24, 24, 27, 0.3)',
+            display: 'flex', flexDirection: 'column', background: 'rgba(24, 24, 27, 0.95)',
             transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
             overflow: 'hidden',
             whiteSpace: 'nowrap'
@@ -768,6 +768,18 @@ export default function ChatInterface() {
         <style>{`
             /* Mobile responsiveness for Chat Interface */
             @media (max-width: 768px) {
+                .primary-sidebar {
+                    position: absolute !important;
+                    z-index: 100 !important;
+                    height: 100vh !important;
+                }
+                .secondary-sidebar {
+                    position: absolute !important;
+                    left: 60px !important;
+                    z-index: 90 !important;
+                    height: 100vh !important;
+                    backdrop-filter: blur(10px) !important;
+                }
                 .chat-welcome-title {
                     font-size: 1.8rem !important;
                 }
