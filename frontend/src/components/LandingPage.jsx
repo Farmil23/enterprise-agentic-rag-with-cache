@@ -82,6 +82,14 @@ export default function LandingPage() {
 
         {/* Right Action & Mobile Menu Toggle */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', zIndex: 101 }}>
+          <button 
+              onClick={() => i18n.changeLanguage(i18n.language.startsWith('id') ? 'en' : 'id')}
+              style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', borderRadius: '4px', padding: '0.4rem 0.8rem', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600, transition: 'all 0.2s' }}
+              onMouseOver={e=>e.currentTarget.style.background='rgba(255,255,255,0.05)'} 
+              onMouseOut={e=>e.currentTarget.style.background='transparent'}
+          >
+              {i18n.language.startsWith('id') ? 'EN' : 'ID'}
+          </button>
           <Link to="/login" className="get-started-btn" style={{ textDecoration: 'none', background: '#e2e8f0', color: '#0f172a', fontWeight: 600, padding: '0.55rem 1.5rem', borderRadius: '4px', transition: 'all 0.2s' }} onMouseOver={e=>{e.currentTarget.style.background='#fff'}} onMouseOut={e=>{e.currentTarget.style.background='#e2e8f0'}}>
             Get Started Free
           </Link>
