@@ -1,12 +1,13 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { Scale, ShieldCheck, Database, BarChart3, ChevronRight, Globe, Lock, Workflow, Network, Layers, CheckCircle2, Play, Plus, X, MessageSquare, Heart } from 'lucide-react'
+import { Scale, ShieldCheck, Database, BarChart3, ChevronRight, Globe, Lock, Workflow, Network, Layers, CheckCircle2, Play, Plus, X, MessageSquare, Heart, Menu } from 'lucide-react'
 
 export default function LandingPage() {
   const navigate = useNavigate()
   const [isDemoLoading, setIsDemoLoading] = useState(false)
   const [showPopup, setShowPopup] = useState(false)
   const [openFaq, setOpenFaq] = useState(null)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     // Show popup after 10 seconds
@@ -63,21 +64,40 @@ export default function LandingPage() {
       
       {/* Navbar */}
       <nav className="navbar" style={{ position: 'sticky', top: 0, left: 0, right: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 4rem', zIndex: 100, background: 'rgba(5, 7, 20, 0.85)', backdropFilter: 'blur(16px)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer' }} onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', zIndex: 101 }} onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
           <Scale size={28} color="#e2e8f0" />
           <span style={{ fontSize: '1.4rem', fontWeight: 700, letterSpacing: '0.5px', color: '#f8fafc' }}>Hanka</span>
         </div>
         
-        <div className="nav-links" style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
+        {/* Desktop Links */}
+        <div className="nav-links hide-mobile" style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
           <button onClick={() => scrollToSection('features')} style={{ background: 'none', border: 'none', color: '#94a3b8', fontSize: '0.95rem', fontWeight: 500, cursor: 'pointer', transition: 'color 0.2s' }} onMouseOver={e=>e.currentTarget.style.color='#fff'} onMouseOut={e=>e.currentTarget.style.color='#94a3b8'}>Solutions</button>
           <button onClick={() => scrollToSection('faq')} style={{ background: 'none', border: 'none', color: '#94a3b8', fontSize: '0.95rem', fontWeight: 500, cursor: 'pointer', transition: 'color 0.2s' }} onMouseOver={e=>e.currentTarget.style.color='#fff'} onMouseOut={e=>e.currentTarget.style.color='#94a3b8'}>FAQ</button>
-          <button className="hide-mobile" style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', fontWeight: 500, padding: '0.5rem 1.25rem', borderRadius: '4px', cursor: 'pointer', transition: 'all 0.2s' }} onMouseOver={e=>e.currentTarget.style.background='rgba(255,255,255,0.05)'} onMouseOut={e=>e.currentTarget.style.background='transparent'}>
+          <button style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', fontWeight: 500, padding: '0.5rem 1.25rem', borderRadius: '4px', cursor: 'pointer', transition: 'all 0.2s' }} onMouseOver={e=>e.currentTarget.style.background='rgba(255,255,255,0.05)'} onMouseOut={e=>e.currentTarget.style.background='transparent'}>
             Book a Demo
           </button>
-          <Link to="/login" style={{ textDecoration: 'none', background: '#e2e8f0', color: '#0f172a', fontWeight: 600, padding: '0.55rem 1.5rem', borderRadius: '4px', transition: 'all 0.2s' }} onMouseOver={e=>{e.currentTarget.style.background='#fff'}} onMouseOut={e=>{e.currentTarget.style.background='#e2e8f0'}}>
+        </div>
+
+        {/* Right Action & Mobile Menu Toggle */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', zIndex: 101 }}>
+          <Link to="/login" className="get-started-btn" style={{ textDecoration: 'none', background: '#e2e8f0', color: '#0f172a', fontWeight: 600, padding: '0.55rem 1.5rem', borderRadius: '4px', transition: 'all 0.2s' }} onMouseOver={e=>{e.currentTarget.style.background='#fff'}} onMouseOut={e=>{e.currentTarget.style.background='#e2e8f0'}}>
             Get Started Free
           </Link>
+          <button className="mobile-menu-toggle" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} style={{ background: 'none', border: 'none', color: '#f8fafc', cursor: 'pointer', display: 'none', alignItems: 'center', justifyContent: 'center' }}>
+            {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
         </div>
+
+        {/* Mobile Menu Dropdown */}
+        {isMobileMenuOpen && (
+          <div className="mobile-menu" style={{ position: 'absolute', top: '100%', left: 0, right: 0, background: 'rgba(5, 7, 20, 0.95)', backdropFilter: 'blur(16px)', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+            <button onClick={() => { scrollToSection('features'); setIsMobileMenuOpen(false); }} style={{ background: 'none', border: 'none', color: '#f8fafc', fontSize: '1.2rem', fontWeight: 500, cursor: 'pointer', textAlign: 'left' }}>Solutions</button>
+            <button onClick={() => { scrollToSection('faq'); setIsMobileMenuOpen(false); }} style={{ background: 'none', border: 'none', color: '#f8fafc', fontSize: '1.2rem', fontWeight: 500, cursor: 'pointer', textAlign: 'left' }}>FAQ</button>
+            <button onClick={() => setIsMobileMenuOpen(false)} style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', fontWeight: 500, padding: '0.75rem', borderRadius: '4px', cursor: 'pointer', fontSize: '1.1rem', textAlign: 'center', marginTop: '1rem' }}>
+              Book a Demo
+            </button>
+          </div>
+        )}
       </nav>
 
       {/* Hero Section */}
@@ -400,8 +420,10 @@ export default function LandingPage() {
 
         @media (max-width: 768px) {
             .navbar { padding: 1rem 1.5rem !important; }
-            .nav-links { gap: 1rem !important; }
+            .nav-links { display: none !important; }
             .hide-mobile { display: none !important; }
+            .mobile-menu-toggle { display: flex !important; }
+            .get-started-btn { padding: 0.4rem 0.8rem !important; font-size: 0.85rem !important; }
             
             .section-padding { padding: 4rem 1.5rem !important; }
             .hero-section { padding: 4rem 1.5rem 5rem !important; }
