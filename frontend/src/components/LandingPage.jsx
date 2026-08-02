@@ -336,9 +336,9 @@ export default function LandingPage() {
               Agentic RAG Platform Built With <Heart size={14} color="#ef4444" fill="#ef4444" /> For Enterprises
           </div>
 
-          <div style={{ display: 'flex', gap: '1rem' }}>
-              <a href="#" style={{ color: '#94a3b8', transition: 'color 0.2s' }} onMouseOver={e=>e.currentTarget.style.color='#fff'} onMouseOut={e=>e.currentTarget.style.color='#94a3b8'}><Globe size={18} /></a>
-              <a href="#" style={{ color: '#94a3b8', transition: 'color 0.2s' }} onMouseOver={e=>e.currentTarget.style.color='#fff'} onMouseOut={e=>e.currentTarget.style.color='#94a3b8'}><Globe size={18} /></a>
+          <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+              <Link to="/privacy" style={{ color: '#94a3b8', textDecoration: 'none', transition: 'color 0.2s' }} onMouseOver={e=>e.currentTarget.style.color='#fff'} onMouseOut={e=>e.currentTarget.style.color='#94a3b8'}>Privacy Policy</Link>
+              <Link to="/terms" style={{ color: '#94a3b8', textDecoration: 'none', transition: 'color 0.2s' }} onMouseOver={e=>e.currentTarget.style.color='#fff'} onMouseOut={e=>e.currentTarget.style.color='#94a3b8'}>Terms of Service</Link>
           </div>
       </footer>
 

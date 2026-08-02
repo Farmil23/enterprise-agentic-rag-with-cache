@@ -6,6 +6,8 @@ import TenantAdminDashboard from './components/TenantAdminDashboard'
 import SuperAdminDashboard from './components/SuperAdminDashboard'
 import WaitingApproval from './components/WaitingApproval'
 import Guide from './components/Guide'
+import PrivacyPolicy from './components/PrivacyPolicy'
+import TermsOfService from './components/TermsOfService'
 
 function ProtectedRoute({ children, allowedRoles }) {
   const jwt = localStorage.getItem('rag_jwt')
@@ -33,6 +35,8 @@ function App() {
         <Route path="/login" element={<LoginRegister />} />
         <Route path="/waiting-approval" element={<WaitingApproval />} />
         <Route path="/guide" element={<Guide />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/terms" element={<TermsOfService />} />
         
         <Route path="/chat" element={
           <ProtectedRoute allowedRoles={['regular_user', 'tenant_admin', 'super_admin']}>
