@@ -5,10 +5,12 @@ import { Scale, Check } from 'lucide-react'
 
 export default function LoginRegister() {
   const [isLogin, setIsLogin] = useState(true)
+  const [isNewTenant, setIsNewTenant] = useState(true)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
   const [tenantName, setTenantName] = useState('')
+  const [providedTenantId, setProvidedTenantId] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
   const { t } = useTranslation()
@@ -47,13 +49,15 @@ export default function LoginRegister() {
     e.preventDefault()
     setIsLoading(true)
     try {
-      const tenantId = tenantName.toLowerCase().replace(/[^a-z0-9]/g, '_')
-      const payload = { 
-        username, 
-        password, 
-        tenant_id: tenantId, 
-        tenant_name: tenantName,
-        role: "tenant_admin" // Users registering from the landing page create new workspaces
+      let payload = { username, password, email }
+      if (isNewTenant) {
+        const tenantId = tenantName.toLowerCase().replace(/[^a-z0-9]/g, '_')
+        payload.tenant_id = tenantId
+        payload.tenant_name = tenantName
+        payload.role = "tenant_admin"
+      } else {
+        payload.tenant_id = providedTenantId
+        payload.role = "regular_user"
       }
       
       const response = await fetch(`${import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:8000' : window.location.origin)}/auth/register`, {
@@ -192,19 +196,40 @@ export default function LoginRegister() {
                     onBlur={e=>e.currentTarget.style.border='1px solid #d1d5db'}
                   />
                 </div>
-                <div>
-                  <label style={{ display: 'block', fontSize: '0.8rem', color: '#4b5563', marginBottom: '0.5rem' }}>Workspace (Tenant) Name</label>
-                  <input 
-                    type="text" 
-                    value={tenantName} 
-                    onChange={e => setTenantName(e.target.value)}
-                    required
-                    placeholder="e.g. Apple, Tesla"
-                    style={inputStyle} 
-                    onFocus={e=>e.currentTarget.style.border='1px solid #3b82f6'}
-                    onBlur={e=>e.currentTarget.style.border='1px solid #d1d5db'}
-                  />
+                <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+                  <button type="button" onClick={() => setIsNewTenant(true)} style={{flex:1, padding: '0.5rem', background: isNewTenant ? '#0f172a' : '#f1f5f9', color: isNewTenant ? '#fff' : '#4b5563', border: '1px solid #d1d5db', borderRadius: '4px', fontSize: '0.85rem', cursor: 'pointer', transition: 'all 0.2s'}}>Create Workspace</button>
+                  <button type="button" onClick={() => setIsNewTenant(false)} style={{flex:1, padding: '0.5rem', background: !isNewTenant ? '#0f172a' : '#f1f5f9', color: !isNewTenant ? '#fff' : '#4b5563', border: '1px solid #d1d5db', borderRadius: '4px', fontSize: '0.85rem', cursor: 'pointer', transition: 'all 0.2s'}}>Join Workspace</button>
                 </div>
+
+                {isNewTenant ? (
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.8rem', color: '#4b5563', marginBottom: '0.5rem' }}>Workspace (Tenant) Name</label>
+                    <input 
+                      type="text" 
+                      value={tenantName} 
+                      onChange={e => setTenantName(e.target.value)}
+                      required={isNewTenant}
+                      placeholder="e.g. Apple, Tesla"
+                      style={inputStyle} 
+                      onFocus={e=>e.currentTarget.style.border='1px solid #3b82f6'}
+                      onBlur={e=>e.currentTarget.style.border='1px solid #d1d5db'}
+                    />
+                  </div>
+                ) : (
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.8rem', color: '#4b5563', marginBottom: '0.5rem' }}>Workspace ID</label>
+                    <input 
+                      type="text" 
+                      value={providedTenantId} 
+                      onChange={e => setProvidedTenantId(e.target.value)}
+                      required={!isNewTenant}
+                      placeholder="e.g. apple_inc"
+                      style={inputStyle} 
+                      onFocus={e=>e.currentTarget.style.border='1px solid #3b82f6'}
+                      onBlur={e=>e.currentTarget.style.border='1px solid #d1d5db'}
+                    />
+                  </div>
+                )}
               </>
             )}
 
